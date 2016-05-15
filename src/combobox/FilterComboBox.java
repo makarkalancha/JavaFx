@@ -33,16 +33,27 @@ public class FilterComboBox extends ComboBox<String> {
         this.configAutoFilterListener();
     }
 
+    //https://community.oracle.com/thread/2474433
+    //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
     private void configAutoFilterListener() {
         final FilterComboBox currentInstance = this;
+//        this.valueProperty()
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
                 previousValue = oldValue;
                 final TextField editor = currentInstance.getEditor();
                 final String selected = currentInstance.getSelectionModel().getSelectedItem();
 
-                if (selected == null || !selected.equals(editor.getText())) {
+//                String editorGetTextDebug = editor.getText();
+//
+//                if (selected == null || !selected.equals(editor.getText())) {
+                System.out.println(">>>observable:"+observable);
+                System.out.println(">>>oldValue:"+oldValue);
+                System.out.println(">>>newValue:"+newValue);
+                System.out.println(">>>selected:"+selected);
+                if (selected == null || !selected.equals(newValue)) {
                     filterItems(newValue, currentInstance);
 
                     currentInstance.show();
