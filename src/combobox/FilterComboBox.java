@@ -66,32 +66,40 @@ public class FilterComboBox extends ComboBox<String> {
     }
 
     private void filterItems(String filter, ComboBox<String> comboBox) {
-        if(StringUtils.isEmpty(filter)){
-            bufferList = this.readFromList(filter, initialList);
-        }else {
-            StringBuilder regex = new StringBuilder();
-            for (int i = 0; i < filter.length(); i++) {
-                regex.append(filter.charAt(i));
-                regex.append(".*");
-            }
-            bufferList.clear();
-            Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
-            for (String string : initialList) {
-                Matcher matcher = pattern.matcher(string);
-                if (matcher.find()) {
-                    bufferList.add(string);
-                }
-            }
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run(){
 
-//        if (filter.startsWith(previousValue) && !previousValue.isEmpty()) {
-//            ObservableList<String> filteredList = this.readFromList(filter, bufferList);
-//            bufferList.clear();
-//            bufferList = filteredList;
-//        } else {
-//            bufferList = this.readFromList(filter, initialList);
-//        }
-        comboBox.setItems(bufferList);
+
+
+                if(StringUtils.isEmpty(filter)){
+                    bufferList = FilterComboBox.this.readFromList(filter, initialList);
+                }else {
+                    StringBuilder regex = new StringBuilder();
+                    for (int i = 0; i < filter.length(); i++) {
+                        regex.append(filter.charAt(i));
+                        regex.append(".*");
+                    }
+                    bufferList.clear();
+                    Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
+                    for (String string : initialList) {
+                        Matcher matcher = pattern.matcher(string);
+                        if (matcher.find()) {
+                            bufferList.add(string);
+                        }
+                    }
+                }
+
+        //        if (filter.startsWith(previousValue) && !previousValue.isEmpty()) {
+        //            ObservableList<String> filteredList = this.readFromList(filter, bufferList);
+        //            bufferList.clear();
+        //            bufferList = filteredList;
+        //        } else {
+        //            bufferList = this.readFromList(filter, initialList);
+        //        }
+                comboBox.setItems(bufferList);
+            }
+        });
     }
 
     private ObservableList<String> readFromList(String filter, ObservableList<String> originalList) {
