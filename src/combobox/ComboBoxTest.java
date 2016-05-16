@@ -57,16 +57,16 @@ public class ComboBoxTest extends Application {
 //        );
         List<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(
-                "jacob.smith@example.com",
-                "isabella.johnson@example.com",
-                "ethan.williams@example.com",
-                "emma.jones@example.com",
-                "michael.brown@example.com",
-                "Daniel", "Dustin", "David", "Damascus", "Russ",
-                "UpdateAttributeAbstractHelper",
-                "UpdateAttributeAbstractHelperBean",
-                "UpdateAttributeAbstractHelperLocal",
-                "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт"));
+                "jacob.smith@example.com", //1
+                "isabella.johnson@example.com", //2
+                "ethan.williams@example.com", //3
+                "emma.jones@example.com", //4
+                "michael.brown@example.com", //5
+                "Daniel", "Dustin", "David", "Damascus", "Russ", //10
+                "UpdateAttributeAbstractHelper", //11
+                "UpdateAttributeAbstractHelperBean", //12
+                "UpdateAttributeAbstractHelperLocal", //13
+                "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт")); //19
         ObservableList<String> items = FXCollections.observableList(list);
         final ComboBox emailComboBox = new FilterComboBox(items);
 
@@ -75,6 +75,10 @@ public class ComboBoxTest extends Application {
         emailComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {
+//                System.out.println(">>>emailComboBox.valueProperty().addListener(new ChangeListener<String>():");
+//                System.out.println(">>>ov:" + ov);
+//                System.out.println(">>>t:" + t);
+//                System.out.println(">>>t1:" + t1);
                 address = t1;
             }
         });
