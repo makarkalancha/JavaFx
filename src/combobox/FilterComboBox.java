@@ -33,7 +33,6 @@ public class FilterComboBox extends ComboBox<String> {
         this.configAutoFilterListener();
     }
 
-    //https://community.oracle.com/thread/2474433
     //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
     private void configAutoFilterListener() {
         final FilterComboBox currentInstance = this;
@@ -55,7 +54,6 @@ public class FilterComboBox extends ComboBox<String> {
                 System.out.println(">>>selected:"+selected);
                 if (selected == null || !selected.equals(newValue)) {
                     filterItems(newValue, currentInstance);
-
                     currentInstance.show();
 //                    if (currentInstance.getItems().size() == 1) {
 //                        setUserInputToOnlyOption(currentInstance, editor);
@@ -66,12 +64,18 @@ public class FilterComboBox extends ComboBox<String> {
     }
 
     private void filterItems(String filter, ComboBox<String> comboBox) {
+        /**
+         * https://community.oracle.com/thread/2474433
+         *
+         * works correctly if runLater in here
+         * not working if currentInstance.show(); (from method configAutoFilterListener) is in runlater
+         *
+         * [http://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx]:
+         * Use Platform.runLater(...) for quick and simple operations and Task for complex and big operations .
+         */
         Platform.runLater(new Runnable() {
             @Override
             public void run(){
-
-
-
                 if(StringUtils.isEmpty(filter)){
                     bufferList = FilterComboBox.this.readFromList(filter, initialList);
                 }else {
@@ -81,6 +85,12 @@ public class FilterComboBox extends ComboBox<String> {
                         regex.append(".*");
                     }
                     bufferList.clear();
+                    /**
+                     * TODO accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
+                     * unit test for regex
+                     * Exception in thread "JavaFX Application Thread" java.util.regex.PatternSyntaxException: Unclosed group near index 81
+                     * j.*a.*c.*o.*b.*P.*l.*a.*t.*f.*o.*r.*m.*..*r.*u.*n.*L.*a.*t.*e.*r.*(.*n.*e.*w.* .*
+                     */
                     Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
                     for (String string : initialList) {
                         Matcher matcher = pattern.matcher(string);
