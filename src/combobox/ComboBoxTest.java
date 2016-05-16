@@ -66,7 +66,8 @@ public class ComboBoxTest extends Application {
                 "UpdateAttributeAbstractHelper", //11
                 "UpdateAttributeAbstractHelperBean", //12
                 "UpdateAttributeAbstractHelperLocal", //13
-                "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт")); //19
+                "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт",//19
+                "emma(johnson)")); //20
         ObservableList<String> items = FXCollections.observableList(list);
         final ComboBox emailComboBox = new FilterComboBox(items);
 
