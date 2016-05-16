@@ -1,5 +1,7 @@
 package combobox;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
@@ -79,25 +81,8 @@ public class FilterComboBox extends ComboBox<String> {
                 if(StringUtils.isEmpty(filter)){
                     bufferList = FilterComboBox.this.readFromList(filter, initialList);
                 }else {
-                    StringBuilder regex = new StringBuilder();
-                    for (int i = 0; i < filter.length(); i++) {
-                        regex.append(filter.charAt(i));
-                        regex.append(".*");
-                    }
                     bufferList.clear();
-                    /**
-                     * TODO accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
-                     * unit test for regex
-                     * Exception in thread "JavaFX Application Thread" java.util.regex.PatternSyntaxException: Unclosed group near index 81
-                     * j.*a.*c.*o.*b.*P.*l.*a.*t.*f.*o.*r.*m.*..*r.*u.*n.*L.*a.*t.*e.*r.*(.*n.*e.*w.* .*
-                     */
-                    Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
-                    for (String string : initialList) {
-                        Matcher matcher = pattern.matcher(string);
-                        if (matcher.find()) {
-                            bufferList.add(string);
-                        }
-                    }
+                    bufferList.addAll(filterString(filter));
                 }
 
         //        if (filter.startsWith(previousValue) && !previousValue.isEmpty()) {
@@ -110,6 +95,29 @@ public class FilterComboBox extends ComboBox<String> {
                 comboBox.setItems(bufferList);
             }
         });
+    }
+
+    private List<String> filterString(String filter){
+        List<String> result = new ArrayList<>();
+        StringBuilder regex = new StringBuilder();
+        for (int i = 0; i < filter.length(); i++) {
+            regex.append(filter.charAt(i));
+            regex.append(".*");
+        }
+        /**
+         * TODO accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
+         * unit test for regex
+         * Exception in thread "JavaFX Application Thread" java.util.regex.PatternSyntaxException: Unclosed group near index 81
+         * j.*a.*c.*o.*b.*P.*l.*a.*t.*f.*o.*r.*m.*..*r.*u.*n.*L.*a.*t.*e.*r.*(.*n.*e.*w.* .*
+         */
+        Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
+        for (String string : initialList) {
+            Matcher matcher = pattern.matcher(string);
+            if (matcher.find()) {
+                result.add(string);
+            }
+        }
+        return result;
     }
 
     private ObservableList<String> readFromList(String filter, ObservableList<String> originalList) {
