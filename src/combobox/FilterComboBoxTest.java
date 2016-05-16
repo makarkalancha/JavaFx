@@ -79,18 +79,24 @@ public class FilterComboBoxTest {
     private List<String> filterString(String filter){
         List<String> result = new ArrayList<>();
         StringBuilder regex = new StringBuilder();
+        /**
+         * accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
+         * unit test for regex
+         * Exception in thread "JavaFX Application Thread" java.util.regex.PatternSyntaxException: Unclosed group near index xx
+         * j.*a.*(.*
+         * in order to escape special characters:
+         * \Q -> Nothing, but quotes all characters until \E
+         * \E -> Nothing, but ends quoting started by \Q
+         */
         for (int i = 0; i < filter.length(); i++) {
             regex.append("\\Q");
             regex.append(filter.charAt(i));
             regex.append("\\E.*");
         }
-        /**
-         * TODO accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
-         * unit test for regex
-         * Exception in thread "JavaFX Application Thread" java.util.regex.PatternSyntaxException: Unclosed group near index 81
-         * j.*a.*c.*o.*b.*P.*l.*a.*t.*f.*o.*r.*m.*..*r.*u.*n.*L.*a.*t.*e.*r.*(.*n.*e.*w.* .*
-         */
         Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE );
+        /**
+         * Pattern.LITERAL doesn't help, becuase characters ".*" aslo are not considered
+         */
 //        Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.LITERAL);
         for (String string : initialList) {
             Matcher matcher = pattern.matcher(string);
