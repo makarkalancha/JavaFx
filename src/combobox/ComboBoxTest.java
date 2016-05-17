@@ -69,10 +69,11 @@ public class ComboBoxTest extends Application {
                 "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт",//19
                 "emma(johnson)")); //20
         ObservableList<String> items = FXCollections.observableList(list);
-        final ComboBox emailComboBox = new FilterComboBox(items);
+        final ComboBox emailComboBox = new AutoCompleteComboBox(items);
 
         emailComboBox.setPromptText("Email address");
         emailComboBox.setEditable(true);
+        emailComboBox.setVisibleRowCount(10);
         emailComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {

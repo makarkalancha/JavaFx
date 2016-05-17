@@ -17,17 +17,17 @@ import javafx.scene.control.TextField;
  * Created by mcalancea on 2016-03-09.
  */
 
-public class FilterComboBox extends ComboBox<String> {
+public class AutoCompleteComboBox extends ComboBox<String> {
 
     private ObservableList<String> initialList;
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
-    private String previousValue = "";
+//    private String previousValue = "";
 
-    public FilterComboBox() {
+    public AutoCompleteComboBox() {
 
     }
 
-    public FilterComboBox(ObservableList<String> items) {
+    public AutoCompleteComboBox(ObservableList<String> items) {
         super(items);
         super.setEditable(true);
         this.initialList = items;
@@ -37,14 +37,14 @@ public class FilterComboBox extends ComboBox<String> {
 
     //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
     private void configAutoFilterListener() {
-        final FilterComboBox currentInstance = this;
+        final AutoCompleteComboBox currentInstance = this;
 //        this.valueProperty()
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-                previousValue = oldValue;
-                final TextField editor = currentInstance.getEditor();
+//                previousValue = oldValue;
+//                final TextField editor = currentInstance.getEditor();
                 final String selected = currentInstance.getSelectionModel().getSelectedItem();
 
 //                String editorGetTextDebug = editor.getText();
@@ -79,7 +79,7 @@ public class FilterComboBox extends ComboBox<String> {
             @Override
             public void run(){
                 if(StringUtils.isEmpty(filter)){
-                    bufferList = FilterComboBox.this.readFromList(filter, initialList);
+                    bufferList = AutoCompleteComboBox.this.readFromList(filter, initialList);
                 }else {
                     bufferList.clear();
                     bufferList.addAll(filterString(filter));

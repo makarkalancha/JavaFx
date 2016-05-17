@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 /**
  * Created by mcalancea on 2016-05-16.
  */
-public class FilterComboBoxTest {
+public class AutoCompleteComboBoxTest {
     List<String> initialList = new ArrayList<>();
     
     @Before
