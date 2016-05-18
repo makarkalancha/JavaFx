@@ -69,18 +69,25 @@ public class ComboBoxTest extends Application {
                 "хлеб", "молоко", "масло раст", "масло слив", "помидоры зел", "помидоры желт",//19
                 "emma(johnson)")); //20
         ObservableList<String> items = FXCollections.observableList(list);
-        final ComboBox emailComboBox = new AutoCompleteComboBox(items);
+//        final ComboBox emailComboBox = new AutoCompleteComboBox(items);
+        final ComboBox emailComboBox = new AutoCompleteComboBox();
+        emailComboBox.setItems(items);
+//        final ComboBox emailComboBox = new ComboBox(items);
 
         emailComboBox.setPromptText("Email address");
         emailComboBox.setEditable(true);
         emailComboBox.setVisibleRowCount(10);
         emailComboBox.valueProperty().addListener(new ChangeListener<String>() {
+//        emailComboBox.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {
 //                System.out.println(">>>emailComboBox.valueProperty().addListener(new ChangeListener<String>():");
 //                System.out.println(">>>ov:" + ov);
 //                System.out.println(">>>t:" + t);
 //                System.out.println(">>>t1:" + t1);
+//
+//                final String selected = (String) emailComboBox.getSelectionModel().getSelectedItem();
+//                System.out.println(">>>selected:" + selected);
                 address = t1;
             }
         });
