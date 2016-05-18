@@ -24,6 +24,38 @@ import javafx.scene.control.TextField;
  * 3) move cursor so it is somewhere inside string (between start and end)
  * 4) press shift+end
  * 5) change listener keeps running even after app is closed:
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jacob.smith@example.com]
+ >>>oldValue:
+ >>>newValue:jacob.smith@example.com
+ >>>selected:jacob.smith@example.com
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jaco(]
+ >>>oldValue:jacob.smith@example.com
+ >>>newValue:jaco(
+ >>>selected:jacob.smith@example.com
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:jaco(
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: j]
+ >>>oldValue:
+ >>>newValue:j
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jacob.smith@example.com]
+ >>>oldValue:j
+ >>>newValue:jacob.smith@example.com
+ >>>selected:jacob.smith@example.com
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:jacob.smith@example.com
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: emma(johnson)]
+ >>>oldValue:
+ >>>newValue:emma(johnson)
+ >>>selected:emma(johnson)
  >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
  >>>oldValue:emma(johnson)
  >>>newValue:
@@ -88,10 +120,11 @@ public class AutoCompleteComboBox extends ComboBox<String> {
                 System.out.println(">>>oldValue:"+oldValue);
                 System.out.println(">>>newValue:"+newValue);
                 System.out.println(">>>selected:"+selected);
-                if (selected == null || !selected.equals(newValue)) {
+//                if (selected == null || !selected.equals(newValue)) {
+                if (selected != null && !selected.equals(newValue)) {
                     System.out.println(">>>filtering...");
                     filterItems(newValue, currentInstance);
-                    currentInstance.show();
+
 //                    if (currentInstance.getItems().size() == 1) {
 //                        setUserInputToOnlyOption(currentInstance, editor);
 //                    }
@@ -128,6 +161,7 @@ public class AutoCompleteComboBox extends ComboBox<String> {
         //            bufferList = this.readFromList(filter, initialList);
         //        }
                 comboBox.setItems(bufferList);
+                comboBox.show();
             }
         });
     }
