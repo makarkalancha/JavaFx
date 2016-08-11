@@ -29,10 +29,10 @@ import javafx.stage.Stage;
 
 public class ComboBoxTest extends Application {
 
-    public static void main(String[] args) {
-
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//
+//        launch(args);
+//    }
 
     final Button button = new Button ("Send");
     final Label notification = new Label ();
