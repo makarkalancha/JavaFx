@@ -80,19 +80,22 @@ public class BorderPaneTest extends Application {
 //        HBox hbox = new HBox();
 
         VBox vbox = new VBox(10);
+        scrollPane.setContent(vbox);
         vbox.setPadding(new Insets(10));
 
         Text text = new Text("Navigation");
         text.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
+        vbox.getChildren().add(text);
 
         VBox vboxText = new VBox(10);
-        for (int i = 1; i <= 500; i++)
-        {
+        for (int i = 1; i <= 500; i++) {
             vboxText.getChildren().add(new Text("Category " + i));
+
         }
         vboxText.setTranslateX(10);
+        vbox.getChildren().add(vboxText);
 
-        vbox.getChildren().addAll(text, vboxText);
+//        vbox.getChildren().addAll(text, vboxText);
 //        hbox.getChildren().addAll(vbox, new Separator(Orientation.VERTICAL));
         scrollPane.setContent(vbox);
 
