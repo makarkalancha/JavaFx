@@ -20,6 +20,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import textField.LimitedTextField;
+import textField.TextFieldLimit;
 
 /**
  * Created by mcalancea on 2016-03-09.
@@ -36,13 +38,15 @@ public class ComboBoxTest extends Application {
 
     final Button button = new Button ("Send");
     final Label notification = new Label ();
-    final TextField subject = new TextField("");
+//    final TextField subject = new TextField("");
+    final LimitedTextField subject = new LimitedTextField();
     final TextArea text = new TextArea ("");
 
     String address = " ";
 
     @Override
     public void start(Stage stage) {
+        subject.setMaxLength(5);
 
         stage.setTitle("ComboBoxSample");
         Scene scene = new Scene(new Group(), 450, 250);
