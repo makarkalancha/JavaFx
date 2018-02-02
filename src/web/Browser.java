@@ -26,7 +26,7 @@ public class Browser extends Region{
         //apply the styles
         getStyleClass().add("browser");
         //load the web page
-        webEngine.load("http://www.imdb.com");
+        webEngine.load("https://www.oracle.com/products/index.html");
         //add the web view to the scene
         getChildren().add(browser);
     }
