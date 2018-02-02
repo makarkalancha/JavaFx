@@ -21,6 +21,10 @@ import javafx.stage.Stage;
 public class WebViewSample extends Application{
     private Scene scene;
 
+    https://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
+    continue from:
+    In this code, the web engine loads a URL that points to the Oracle corporate web site. The WebView object that contains this web engine is added to the application scene by using the getChildren and add methods.
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         //crate the scene
