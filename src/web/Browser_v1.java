@@ -5,6 +5,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -18,23 +21,17 @@ import javafx.stage.Stage;
  * Date: 02 Feb 2018
  * Time: 16:42
  */
-public class Browser extends Region{
+public class Browser_v1 extends Region{
     private final WebView browser = new WebView();
     private final WebEngine webEngine = browser.getEngine();
 
-    public Browser() {
+    public Browser_v1() {
         //apply the styles
         getStyleClass().add("browser");
         //load the web page
         webEngine.load("https://www.oracle.com/products/index.html");
         //add the web view to the scene
         getChildren().add(browser);
-    }
-
-    private Node createSpacer(){
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        return spacer;
     }
 
     @Override

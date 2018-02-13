@@ -1,16 +1,8 @@
 package web;
 
 import javafx.application.Application;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
@@ -21,15 +13,16 @@ import javafx.stage.Stage;
 public class WebViewSample extends Application{
     private Scene scene;
 
-    https://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
-    continue from:
-    In this code, the web engine loads a URL that points to the Oracle corporate web site. The WebView object that contains this web engine is added to the application scene by using the getChildren and add methods.
+//    https://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
+//    continue from:
+//    In this code, the web engine loads a URL that points to the Oracle corporate web site. The WebView object that contains this web engine is added to the application scene by using the getChildren and add methods.
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         //crate the scene
         primaryStage.setTitle("Web view");
-        scene = new Scene(new Browser(), 750, 500, Color.web("#666970"));
+        scene = new Scene(new Browser_v5(), 750, 500, Color.web("#dc143c"));
+//        scene = new Scene(new Browser_v1(), 750, 500);
         primaryStage.setScene(scene);
         scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
         primaryStage.show();
