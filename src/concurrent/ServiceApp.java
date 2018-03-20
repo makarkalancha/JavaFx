@@ -32,13 +32,13 @@ public class ServiceApp extends Application {
     private Worker<Void> onLoadingCollections;
     private Command<Integer> onGetCountWorker_Task;
     private BiFunction<Integer, Worker, Void> onGetCountWorker_Success;
-    private BiFunction<Integer, Worker, Void> onGetCountWorker_Fail;
+    private BiFunction<Throwable, Worker, Void> onGetCountWorker_Fail;
     private SequenceStep<Integer> job2_onGetCountWorker_refresh;
     private SequenceStep<Integer> job1_onGetCountWorker_getInvoiceAndTransferWorker;
 
     private Command<Boolean> onGetPageNumberWorker_Task;
     private BiFunction<Boolean, Worker, Void> onGetPageNumberWorker_Success;
-    private BiFunction<Boolean, Worker, Void> onGetPageNumberWorker_Fail;
+    private BiFunction<Throwable, Worker, Void> onGetPageNumberWorker_Fail;
     private SequenceStep<Boolean> job3_onGetPageNumberWorker_refresh;
     private SequenceStep<Boolean> job2_onGetPageNumberWorker_getInvoiceAndTransferWorker;
 
@@ -97,9 +97,9 @@ public class ServiceApp extends Application {
             }
         };
 
-        this.onGetCountWorker_Fail = new BiFunction<Integer, Worker, Void>() {
+        this.onGetCountWorker_Fail = new BiFunction<Throwable, Worker, Void>() {
             @Override
-            public Void apply(Integer value, Worker worker) {
+            public Void apply(Throwable value, Worker worker) {
                 LOG.info("onGetCountWorker_Fail");
                 pForm.close();
                 return null;
@@ -136,9 +136,9 @@ public class ServiceApp extends Application {
             }
         };
 
-        this.onGetPageNumberWorker_Fail = new BiFunction<Boolean, Worker, Void>() {
+        this.onGetPageNumberWorker_Fail = new BiFunction<Throwable, Worker, Void>() {
             @Override
-            public Void apply(Boolean value, Worker worker) {
+            public Void apply(Throwable value, Worker worker) {
                 LOG.info("onGetPageNumberWorker_Fail");
                 pForm.close();
                 return null;

@@ -20,11 +20,11 @@ public class SequenceStep<V> extends Service<V>{
     private final static Logger LOG = LogManager.getLogger(SequenceStep.class);
 
     private final Command<V> task;
-    private final BiFunction<V, Worker, Void> failed;
+    private final BiFunction<Throwable, Worker, Void> failed;
     private final BiFunction<V, Worker, Void> succeeded;
     private final WorkerSequencer workerSequencer;
 
-    public SequenceStep(Command<V> task, BiFunction<V, Worker, Void> failed, BiFunction<V, Worker, Void> succeeded, WorkerSequencer workerSequencer) {
+    public SequenceStep(Command<V> task, BiFunction<Throwable, Worker, Void> failed, BiFunction<V, Worker, Void> succeeded, WorkerSequencer workerSequencer) {
         this.task = task;
         this.failed = failed;
         this.succeeded = succeeded;
@@ -45,7 +45,7 @@ public class SequenceStep<V> extends Service<V>{
     protected void failed() {
         super.failed();
         try {
-            failed.apply(getValue(), workerSequencer.next());
+            failed.apply(getException(), workerSequencer.next());
         }catch (Exception e){
             LOG.error("failed", e);
         }
