@@ -19,7 +19,7 @@ public class WebViewSample extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //crate the scene
+        //create the scene
         primaryStage.setTitle("Web view");
         scene = new Scene(new Browser_v5(), 750, 500, Color.web("#dc143c"));
 //        scene = new Scene(new Browser_v1(), 750, 500);
