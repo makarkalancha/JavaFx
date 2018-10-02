@@ -58,7 +58,8 @@ public class TimePickerSkin1 extends ComboBoxPopupControl<LocalTime> {
         });
 
 //        // create calender or clock button
-        clock is set here svg to glyph
+//        clock is set here svg to glyph
+        //this is clock image instead of arrow in combobox
 //        arrow = new SVGGlyph1(0,
 //                "clock",
 //                "M512 310.857v256q0 8-5.143 13.143t-13.143 5.143h-182.857q-8 "
