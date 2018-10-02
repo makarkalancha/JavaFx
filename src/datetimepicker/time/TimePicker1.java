@@ -79,8 +79,7 @@ public class TimePicker1 extends ComboBoxBase<LocalTime> {
     }
 
     protected Skin<?> createDefaultSkin() {
-//        return new JFXTimePickerSkin(this);
-        return null;
+        return new TimePickerSkin1(this);
     }
 
     public final ObjectProperty<StackPane> dialogParentProperty() {
