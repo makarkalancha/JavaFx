@@ -2,9 +2,14 @@ package datetimepicker;
 
 import com.jfoenix.controls.JFXTimePicker;
 import datetimepicker.time.TimePicker1;
+import datetimepicker.time.v2.TimePicker2;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -33,6 +38,7 @@ public class DateTimeSample extends Application{
         Scene scene = new Scene(new Group(), 450, 250);
 
         VBox vBox = new VBox();
+        vBox.setSpacing(5d);
 //        //tornado
 //        DateTimePicker datetimepicker = new DateTimePicker();
 //        datetimepicker.setDateTimeValue(LocalDateTime.of(2018, Month.SEPTEMBER, 10, 10, 5));
@@ -75,6 +81,24 @@ public class DateTimeSample extends Application{
         TimePicker1 timePicker1 = new TimePicker1();
         timePicker1.setIs24HourView(true);
         vBox.getChildren().add(timePicker1);
+
+        HBox hBox = new HBox();
+        hBox.getChildren().setAll(new Label("2->"),new TimePicker2());
+        vBox.getChildren().add(hBox);
+
+        vBox.getChildren().add(new ComboBox<>());
+        vBox.getChildren().add(new DatePicker());
+
+//        BackgroundImage clockImg = new BackgroundImage(
+////                new Image("if_42_311148.png", 20d, 20d, true, true),
+//                new Image("if_42_311148_edited_32x32.png", 20d, 20d, true, true),
+//                BackgroundRepeat.REPEAT,
+//                BackgroundRepeat.REPEAT,
+//                BackgroundPosition.DEFAULT,
+//                new BackgroundSize(20d, 20d, false, false, false, false)
+////                BackgroundSize.DEFAULT
+//        );
+//        vBox.setBackground(new Background(clockImg));
 
 //        TimePicker1 timePicker1 = new TimePicker1();
 //        timePicker1.setIs24HourView(true);

@@ -29,7 +29,7 @@ import java.util.List;
  * Date: 10 Sep 2018
  * Time: 17:02
  */
-public class SVGGlyph1  extends Pane {
+public class SVGGlyph1 extends Pane {
     private static final String DEFAULT_STYLE_CLASS = "jfx-svg-glyph";
 
     private final int glyphId;

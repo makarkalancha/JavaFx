@@ -5,9 +5,7 @@ import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
@@ -75,19 +73,55 @@ public class TimePickerSkin1 extends ComboBoxPopupControl<LocalTime> {
 //                null);
 //        ((SVGGlyph1) arrow).setFill(timePicker.getDefaultColor());
 //        ((SVGGlyph1) arrow).setSize(20, 20);
-        ImageView clockImg = new ImageView("if_42_311148.png");
-        clockImg.setFitWidth(32d);
-        clockImg.setFitHeight(32d);
-        arrow = new Button();
-        ((Button)arrow).setGraphic(clockImg);
-        arrowButton.getChildren().setAll(arrow);
+//        ImageView clockImg = new ImageView("if_42_311148_edited_32x32.png");
+//        clockImg.setFitWidth(20d);
+//        clockImg.setFitHeight(20d);
+//        BackgroundImage clockImg = new BackgroundImage(
+////                new Image("if_42_311148.png", 20d, 20d, true, true),
+//                new Image("if_42_311148_edited_32x32.png", 15d, 15d, true, true),
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundPosition.DEFAULT,
+//                new BackgroundSize(20d, 20d, false, false, false, false)
+////                BackgroundSize.DEFAULT
+//        );
+//        BackgroundFill clockImg = new BackgroundFill(
+//                Color.RED,
+//                new CornerRadii(1),
+//                new Insets(0d, 0d, 0d, 0d)
+//        );
+//
+////        arrow = new Button();
+////        arrow.setStyle("-fx-background-color: TRANSPARENT; -fx-padding: 1 8 1 8;");
+//        arrow = new Pane();
+////        arrow.setFocusTraversable(false);
+////        arrow.setId("arrow");
+//        arrow.setMaxWidth(Region.USE_PREF_SIZE);
+//        arrow.setMaxHeight(Region.USE_PREF_SIZE);
+//        arrow.setMinSize(StackPane.USE_PREF_SIZE, StackPane.USE_PREF_SIZE);
+//        arrow.setPrefSize(25d, 25d);
+//        arrow.setMaxSize(StackPane.USE_PREF_SIZE, StackPane.USE_PREF_SIZE);
+////        arrow.setMouseTransparent(true);
+////        ((Button)arrow).setGraphic(clockImg);
+//        arrow.setBackground(new Background(clockImg));
+////        arrow.setPrefHeight(-1d);
+////        arrow.setPrefWidth(-1d);
+//
+////        arrowButton.setStyle("-fx-background-color: TRANSPARENT; -fx-padding: 1 8 1 8;");
+////        arrowButton.getChildren().setAll(arrow);
+////        arrowButton = new StackPane();
+////        arrowButton.setFocusTraversable(false);
+////        arrowButton.setId("arrow-button");
+////        arrowButton.getStyleClass().setAll("arrow-button");
+//        arrowButton.getChildren().setAll(arrow);
+////        arrowButton.setBackground(new Background(clockImg));
 
 //        ((TimeTextField1) getEditor()).setFocusColor(timePicker.getDefaultColor());
 
         //dialog = new TimeDialog1(null, content, transitionType, overlayClose)
         registerChangeListener(timePicker.converterProperty(), "CONVERTER");
         registerChangeListener(timePicker.valueProperty(), "VALUE");
-        registerChangeListener(timePicker.defaultColorProperty(), "DEFAULT_COLOR");
+//        registerChangeListener(timePicker.defaultColorProperty(), "DEFAULT_COLOR");
     }
 
     @Override
@@ -100,14 +134,16 @@ public class TimePickerSkin1 extends ComboBoxPopupControl<LocalTime> {
 
     @Override
     public void show() {
-        if (!jfxTimePicker.isOverLay()) {
+//        if (!jfxTimePicker.isOverLay()) {
+        if (false) {
             super.show();
         }
         if (content != null) {
             content.init();
             content.clearFocus();
         }
-        if (dialog == null && jfxTimePicker.isOverLay()) {
+//        if (dialog == null && jfxTimePicker.isOverLay()) {
+        if (dialog == null && true) {
             StackPane dialogParent = jfxTimePicker.getDialogParent();
             if (dialogParent == null) {
                 dialogParent = (StackPane) jfxTimePicker.getScene().getRoot();
@@ -115,7 +151,8 @@ public class TimePickerSkin1 extends ComboBoxPopupControl<LocalTime> {
             dialog = new TimeDialog1(dialogParent, (Region) getPopupContent(),
                     TimeDialog1.DialogTransition.CENTER, true);
             arrowButton.setOnMouseClicked((click) -> {
-                if (jfxTimePicker.isOverLay()) {
+//                if (jfxTimePicker.isOverLay()) {
+                if (true) {
                     StackPane parent = jfxTimePicker.getDialogParent();
                     if (parent == null) {
                         parent = (StackPane) jfxTimePicker.getScene().getRoot();
@@ -128,23 +165,30 @@ public class TimePickerSkin1 extends ComboBoxPopupControl<LocalTime> {
 
     @Override
     protected void handleControlPropertyChanged(String p) {
-        break point here
-        if ("DEFAULT_COLOR".equals(p)) {
+//        break point here
+        /*if ("DEFAULT_COLOR".equals(p)) {
+            System.out.println("TimePickerSkin1.handleControlPropertyChanged->DEFAULT_COLOR");
 //            ((TimeTextField1) getEditor()).setFocusColor(jfxTimePicker.getDefaultColor());
-        } else if ("CONVERTER".equals(p)) {
+        } else*/ if ("CONVERTER".equals(p)) {
+            System.out.println("TimePickerSkin1.handleControlPropertyChanged->CONVERTER");
             updateDisplayNode();
         } else if ("EDITOR".equals(p)) {
+            System.out.println("TimePickerSkin1.handleControlPropertyChanged->EDITOR");
             getEditableInputNode();
         } else if ("SHOWING".equals(p)) {
             if (jfxTimePicker.isShowing()) {
+                System.out.println("TimePickerSkin1.handleControlPropertyChanged->SHOWING.show");
                 show();
             } else {
+                System.out.println("TimePickerSkin1.handleControlPropertyChanged->SHOWING.hide");
                 hide();
             }
         } else if ("VALUE".equals(p)) {
+            System.out.println("TimePickerSkin1.handleControlPropertyChanged->VALUE");
             updateDisplayNode();
             jfxTimePicker.fireEvent(new ActionEvent());
         } else {
+            System.out.println("TimePickerSkin1.handleControlPropertyChanged->else.super");
             super.handleControlPropertyChanged(p);
         }
     }
