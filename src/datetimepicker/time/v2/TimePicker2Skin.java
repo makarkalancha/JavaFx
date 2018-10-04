@@ -1,9 +1,9 @@
 package datetimepicker.time.v2;
 
 import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
-import com.sun.javafx.scene.control.skin.DatePickerContent;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
@@ -25,9 +25,9 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
      *                                                                         *
      **************************************************************************/
 
-    private final TimePicker2 datePicker;
+    private final TimePicker2 timePicker;
     private TextField displayNode;
-    private DatePickerContent datePickerContent;
+    private TimePicker2Content timePickerContent;
 
 //    private final DatePickerBehavior behavior;
 
@@ -49,7 +49,7 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     public TimePicker2Skin(final TimePicker2 control) {
         super(control, new TimePicker2Behavior(control));
 
-        this.datePicker = control;
+        this.timePicker = control;
 
         // install default input map for the control
 //        this.behavior = new DatePickerBehavior(control);
@@ -76,42 +76,45 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
 
 //        registerChangeListener(control.chronologyProperty(), e -> {
 //            updateDisplayNode();
-//            datePickerContent = null;
+//            timePickerContent = null;
 //            popup = null;
 //        });
 //        registerChangeListener(control.converterProperty(), e -> updateDisplayNode());
 //        registerChangeListener(control.dayCellFactoryProperty(), e -> {
 //            updateDisplayNode();
-//            datePickerContent = null;
+//            timePickerContent = null;
 //            popup = null;
 //        });
 //        registerChangeListener(control.showWeekNumbersProperty(), e -> {
-//            if (datePickerContent != null) {
-//                datePickerContent.updateGrid();
-//                datePickerContent.updateWeeknumberDateCells();
+//            if (timePickerContent != null) {
+//                timePickerContent.updateGrid();
+//                timePickerContent.updateWeeknumberDateCells();
 //            }
 //        });
 //        registerChangeListener(control.valueProperty(), e -> {
 //            updateDisplayNode();
-//            if (datePickerContent != null) {
+//            if (timePickerContent != null) {
 //                LocalDate date = control.getValue();
-//                datePickerContent.displayedYearMonthProperty().set((date != null) ? YearMonth.from(date) : YearMonth.now());
-//                datePickerContent.updateValues();
+//                timePickerContent.displayedYearMonthProperty().set((date != null) ? YearMonth.from(date) : YearMonth.now());
+//                timePickerContent.updateValues();
 //            }
 //            control.fireEvent(new ActionEvent());
 //        });
 //        registerChangeListener(control.showingProperty(), e -> {
 //            if (control.isShowing()) {
-//                if (datePickerContent != null) {
-//                    LocalDate date = control.getValue();
-//                    datePickerContent.displayedYearMonthProperty().set((date != null) ? YearMonth.from(date) : YearMonth.now());
-//                    datePickerContent.updateValues();
+//                if (timePickerContent != null) {
+//                    LocalTime time = control.getValue();
+////                    timePickerContent.displayedYearMonthProperty().set((time != null) ? YearMonth.from(time) : YearMonth.now());
+//                    timePicker.setValue(time);
 //                }
 //                show();
 //            } else {
 //                hide();
 //            }
 //        });
+
+        registerChangeListener(timePicker.converterProperty(), "CONVERTER");
+        registerChangeListener(timePicker.valueProperty(), "VALUE");
 
         if (control.isShowing()) {
             show();
@@ -137,15 +140,11 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
 
     /** {@inheritDoc} */
     @Override public Node getPopupContent() {
-        if (datePickerContent == null) {
-//            if (datePicker.getChronology() instanceof HijrahChronology) {
-////                datePickerContent = new DatePickerHijrahContent(datePicker);
-//            } else {
-////                datePickerContent = new DatePickerContent(datePicker);
-//            }
+        if (timePickerContent == null) {
+            timePickerContent = new TimePicker2Content(timePicker);
         }
 
-        return datePickerContent;
+        return timePickerContent;
     }
 
     /** {@inheritDoc} */
@@ -156,15 +155,21 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     }
 
     /** {@inheritDoc} */
-    @Override public void show() {
+    @Override
+    public void show() {
         super.show();
-//        datePickerContent.clearFocus();
+
+//        if (timePickerContent != null) {
+//            timePickerContent.init();
+            timePickerContent.clearFocus();
+//        }
+        System.out.println("timePicker.isShowing():" + timePicker.isShowing());
     }
 
     /** {@inheritDoc} */
     @Override protected TextField getEditor() {
         // Use getSkinnable() here because this method is called from
-        // the super constructor before datePicker is initialized.
+        // the super constructor before timePicker is initialized.
         return ((TimePicker2)getSkinnable()).getEditor();
     }
 
@@ -180,7 +185,7 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
             displayNode.getStyleClass().add("date-picker-display-node");
             updateDisplayNode();
         }
-        displayNode.setEditable(datePicker.isEditable());
+        displayNode.setEditable(timePicker.isEditable());
 
         return displayNode;
     }
@@ -196,5 +201,31 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     /** {@inheritDoc} */
     @Override protected void focusLost() {
         // do nothing
+    }
+
+    @Override
+    protected void handleControlPropertyChanged(String p) {
+        if ("CONVERTER".equals(p)) {
+            System.out.println("TimePickerSkin2.handleControlPropertyChanged->CONVERTER");
+            updateDisplayNode();
+        } else if ("EDITOR".equals(p)) {
+            System.out.println("TimePickerSkin2.handleControlPropertyChanged->EDITOR");
+            getEditableInputNode();
+        } else if ("SHOWING".equals(p)) {
+            if (timePicker.isShowing()) {
+                System.out.println("TimePickerSkin2.handleControlPropertyChanged->SHOWING.show");
+                show();
+            } else {
+                System.out.println("TimePickerSkin2.handleControlPropertyChanged->SHOWING.hide");
+                hide();
+            }
+        } else if ("VALUE".equals(p)) {
+            System.out.println("TimePickerSkin2.handleControlPropertyChanged->VALUE");
+            updateDisplayNode();
+            timePicker.fireEvent(new ActionEvent());
+        } else {
+            System.out.println("TimePickerSkin2.handleControlPropertyChanged->else.super");
+            super.handleControlPropertyChanged(p);
+        }
     }
 }

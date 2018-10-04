@@ -83,7 +83,10 @@ public class DateTimeSample extends Application{
         vBox.getChildren().add(timePicker1);
 
         HBox hBox = new HBox();
-        hBox.getChildren().setAll(new Label("2->"),new TimePicker2());
+        TimePicker2 timePicker2 = new TimePicker2();
+        timePicker2.setIs24HourView(true);
+
+        hBox.getChildren().setAll(new Label("2->"),timePicker2);
         vBox.getChildren().add(hBox);
 
         vBox.getChildren().add(new ComboBox<>());

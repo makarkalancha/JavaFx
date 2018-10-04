@@ -1,18 +1,14 @@
 package datetimepicker.time.v2;
 
-import com.sun.javafx.css.converters.BooleanConverter;
 import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.WritableValue;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import javafx.css.StyleableBooleanProperty;
-import javafx.css.StyleableProperty;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.AccessibleRole;
 import javafx.scene.control.Cell;
@@ -21,7 +17,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 
@@ -43,38 +38,14 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
 
     private LocalTime lastValidTime = null;
     private Chronology lastValidChronology = IsoChronology.INSTANCE;
-
+    private BooleanProperty _24HourView;
     /**
      * Creates a default TimePicker2 instance with a <code>null</code> date value set.
      */
     public TimePicker2() {
-        this(null);
-
-//        valueProperty().addListener(observable -> {
-//            LocalTime time = getValue();
-////            Chronology chrono = getChronology();
-//
-//            if (validateTime(chrono, time)) {
-//                lastValidTime = time;
-//            } else {
-//                System.err.println("Restoring value to " +
-//                        ((lastValidTime == null) ? "null" : getConverter().toString(lastValidTime)));
-//                setValue(lastValidTime);
-//            }
-//        });
-
-//        chronologyProperty().addListener(observable -> {
-//            LocalDate date = getValue();
-//            Chronology chrono = getChronology();
-//
-//            if (validateTime(chrono, date)) {
-//                lastValidChronology = chrono;
-//                defaultConverter = new LocalDateStringConverter(FormatStyle.SHORT, null, chrono);
-//            } else {
-//                System.err.println("Restoring value to " + lastValidChronology);
-//                setChronology(lastValidChronology);
-//            }
-//        });
+        this.defaultConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.ENGLISH);
+        this._24HourView = new SimpleBooleanProperty(false);
+        this.initialize();
     }
 
 //    private boolean validateTime(Chronology chrono, LocalTime time) {
@@ -96,10 +67,19 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
      * @param localTime to be set as the currently selected date in the TimePicker2. Can be null.
      */
     public TimePicker2(LocalTime localTime) {
-        setValue(localTime);
-        getStyleClass().add(DEFAULT_STYLE_CLASS);
-        setAccessibleRole(AccessibleRole.DATE_PICKER);
-        setEditable(true);
+        this.defaultConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.ENGLISH);
+        this._24HourView = new SimpleBooleanProperty(false);
+
+        this.setValue(localTime);
+
+        this.initialize();
+    }
+
+    private void initialize() {
+        this.getStyleClass().add(DEFAULT_STYLE_CLASS);
+        this.setAccessibleRole(AccessibleRole.DATE_PICKER);
+//makes transparent textField        this.setBackground(new Background(new BackgroundFill[]{new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)}));
+        this.setEditable(true);
     }
 
 
@@ -140,19 +120,19 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
      *
      * @defaultValue null
      */
-    private ObjectProperty<Callback<TimePicker2, DateCell>> dayCellFactory;
-    public final void setDayCellFactory(Callback<TimePicker2, DateCell> value) {
-        dayCellFactoryProperty().set(value);
-    }
-    public final Callback<TimePicker2, DateCell> getDayCellFactory() {
-        return (dayCellFactory != null) ? dayCellFactory.get() : null;
-    }
-    public final ObjectProperty<Callback<TimePicker2, DateCell>> dayCellFactoryProperty() {
-        if (dayCellFactory == null) {
-            dayCellFactory = new SimpleObjectProperty<Callback<TimePicker2, DateCell>>(this, "dayCellFactory");
-        }
-        return dayCellFactory;
-    }
+//    private ObjectProperty<Callback<TimePicker2, DateCell>> dayCellFactory;
+//    public final void setDayCellFactory(Callback<TimePicker2, DateCell> value) {
+//        dayCellFactoryProperty().set(value);
+//    }
+//    public final Callback<TimePicker2, DateCell> getDayCellFactory() {
+//        return (dayCellFactory != null) ? dayCellFactory.get() : null;
+//    }
+//    public final ObjectProperty<Callback<TimePicker2, DateCell>> dayCellFactoryProperty() {
+//        if (dayCellFactory == null) {
+//            dayCellFactory = new SimpleObjectProperty<Callback<TimePicker2, DateCell>>(this, "dayCellFactory");
+//        }
+//        return dayCellFactory;
+//    }
 
 
 
@@ -204,35 +184,35 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
      * @return true if popup should display a column showing
      * week numbers
      */
-    public final BooleanProperty showWeekNumbersProperty() {
-        if (showWeekNumbers == null) {
-            String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
-            boolean localizedDefault =
-                    (!country.isEmpty() &&
-                            ControlResources.getNonTranslatableString("TimePicker2.showWeekNumbers").contains(country));
-            showWeekNumbers = new StyleableBooleanProperty(localizedDefault) {
-                @Override public CssMetaData<TimePicker2,Boolean> getCssMetaData() {
-                    return StyleableProperties.SHOW_WEEK_NUMBERS;
-                }
-
-                @Override public Object getBean() {
-                    return TimePicker2.this;
-                }
-
-                @Override public String getName() {
-                    return "showWeekNumbers";
-                }
-            };
-        }
-        return showWeekNumbers;
-    }
-    private BooleanProperty showWeekNumbers;
-    public final void setShowWeekNumbers(boolean value) {
-        showWeekNumbersProperty().setValue(value);
-    }
-    public final boolean isShowWeekNumbers() {
-        return showWeekNumbersProperty().getValue();
-    }
+//    public final BooleanProperty showWeekNumbersProperty() {
+//        if (showWeekNumbers == null) {
+//            String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
+//            boolean localizedDefault =
+//                    (!country.isEmpty() &&
+//                            ControlResources.getNonTranslatableString("TimePicker2.showWeekNumbers").contains(country));
+//            showWeekNumbers = new StyleableBooleanProperty(localizedDefault) {
+//                @Override public CssMetaData<TimePicker2,Boolean> getCssMetaData() {
+//                    return StyleableProperties.SHOW_WEEK_NUMBERS;
+//                }
+//
+//                @Override public Object getBean() {
+//                    return TimePicker2.this;
+//                }
+//
+//                @Override public String getName() {
+//                    return "showWeekNumbers";
+//                }
+//            };
+//        }
+//        return showWeekNumbers;
+//    }
+//    private BooleanProperty showWeekNumbers;
+//    public final void setShowWeekNumbers(boolean value) {
+//        showWeekNumbersProperty().setValue(value);
+//    }
+//    public final boolean isShowWeekNumbers() {
+//        return showWeekNumbersProperty().getValue();
+//    }
 
 
     // --- string converter
@@ -366,7 +346,6 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
     /** {@inheritDoc} */
     @Override protected Skin<?> createDefaultSkin() {
         return new TimePicker2Skin(this);
-//        return null;
     }
 
 
@@ -378,30 +357,66 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
 
     private static final String DEFAULT_STYLE_CLASS = "time-picker";
 
-    private static class StyleableProperties {
-        private static final String country =
-                Locale.getDefault(Locale.Category.FORMAT).getCountry();
-        private static final CssMetaData<TimePicker2, Boolean> SHOW_WEEK_NUMBERS =
-                new CssMetaData<TimePicker2, Boolean>("-fx-show-week-numbers",
-                        BooleanConverter.getInstance(),
-                        (!country.isEmpty() &&
-                                ControlResources.getNonTranslatableString("DatePicker.showWeekNumbers").contains(country))) {
-                    @Override public boolean isSettable(TimePicker2 n) {
-                        return n.showWeekNumbers == null || !n.showWeekNumbers.isBound();
-                    }
+//    /**
+//     * show the popup as an overlay using JFXDialog
+//     * NOTE: to show it properly the scene root must be StackPane, or the user must set
+//     * the dialog parent manually using the property {{@link #dialogParentProperty()}
+//     */
+//    private StyleableBooleanProperty overLay = new SimpleStyleableBooleanProperty(StyleableProperties.OVERLAY,
+//            TimePicker2.this,
+//            "overLay",
+//            false);
+//
+//    public final StyleableBooleanProperty overLayProperty() {
+//        return this.overLay;
+//    }
+//
+//    public final boolean isOverLay() {
+//        return overLay != null && this.overLayProperty().get();
+//    }
+//
+//    public final void setOverLay(final boolean overLay) {
+//        this.overLayProperty().set(overLay);
+//    }
 
-                    @Override public StyleableProperty<Boolean> getStyleableProperty(TimePicker2 n) {
-                        return (StyleableProperty<Boolean>)(WritableValue<Boolean>)n.showWeekNumbersProperty();
-                    }
-                };
+    private static class StyleableProperties {
+//        private static final CssMetaData<TimePicker2, Boolean> OVERLAY =
+//                new CssMetaData<TimePicker2, Boolean>("-overlay",
+//                        BooleanConverter.getInstance(), false) {
+//                    @Override
+//                    public boolean isSettable(TimePicker2 control) {
+//                        return control.overLay == null || !control.overLay.isBound();
+//                    }
+//
+//                    @Override
+//                    public StyleableBooleanProperty getStyleableProperty(TimePicker2 control) {
+//                        return control.overLayProperty();
+//                    }
+//                };
+
+//        private static final String country =
+//                Locale.getDefault(Locale.Category.FORMAT).getCountry();
+//        private static final CssMetaData<TimePicker2, Boolean> SHOW_WEEK_NUMBERS =
+//                new CssMetaData<TimePicker2, Boolean>("-fx-show-week-numbers",
+//                        BooleanConverter.getInstance(),
+//                        (!country.isEmpty() &&
+//                                ControlResources.getNonTranslatableString("DatePicker.showWeekNumbers").contains(country))) {
+//                    @Override public boolean isSettable(TimePicker2 n) {
+//                        return n.showWeekNumbers == null || !n.showWeekNumbers.isBound();
+//                    }
+//
+//                    @Override public StyleableProperty<Boolean> getStyleableProperty(TimePicker2 n) {
+//                        return (StyleableProperty<Boolean>)(WritableValue<Boolean>)n.showWeekNumbersProperty();
+//                    }
+//                };
 
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
 
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables =
                     new ArrayList<CssMetaData<? extends Styleable, ?>>(Control.getClassCssMetaData());
-            Collections.addAll(styleables,
-                    SHOW_WEEK_NUMBERS
+            Collections.addAll(styleables/*,
+                    SHOW_WEEK_NUMBERS*/
             );
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
@@ -458,5 +473,16 @@ public class TimePicker2 extends ComboBoxBase<LocalTime> {
         return TimePicker2.class.getResource("/time-picker.css").toExternalForm();
     }
 
+    public final BooleanProperty _24HourViewProperty() {
+        return this._24HourView;
+    }
+
+    public final boolean is24HourView() {
+        return this._24HourViewProperty().get();
+    }
+
+    public final void setIs24HourView(boolean value) {
+        this._24HourViewProperty().setValue(Boolean.valueOf(value));
+    }
 }
 
