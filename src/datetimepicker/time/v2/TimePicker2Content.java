@@ -1,4 +1,4 @@
-package datetimepicker.time;
+package datetimepicker.time.v2;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -13,14 +13,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -45,18 +44,17 @@ import java.util.Locale;
 
 /**
  * Created by mcalancea
- * Date: 02 Oct 2018
- * Time: 11:54
+ * Date: 04 Oct 2018
+ * Time: 07:55
  */
-public class TimePickerContent1 extends VBox {
-
+public class TimePicker2Content extends VBox {
     private enum TimeUnit {HOURS, MINUTES}
 
     private static final String ROBOTO = "Roboto";
     private static final String SPINNER_LABEL = "spinner-label";
-    protected TimePicker1 timePicker;
+    protected TimePicker2 timePicker;
 
-    private Color fadedColor = Color.rgb(255, 255, 255, 0.67);
+    private Color fadedColor = Color.rgb(0, 0, 0, 0.67);
     private boolean is24HourView = false;
     private double contentCircleRadius = 100;
     private Label selectedHourLabel = new Label();
@@ -76,18 +74,18 @@ public class TimePickerContent1 extends VBox {
     private NumberStringConverter unitConverter = new NumberStringConverter("#00");
     private ObjectProperty<LocalTime> selectedTime = new SimpleObjectProperty<>(this, "selectedTime");
 
-
-    TimePickerContent1(final TimePicker1 jfxTimePicker) {
-        this.timePicker = jfxTimePicker;
+    TimePicker2Content(final TimePicker2 timePicker) {
+        this.timePicker = timePicker;
         LocalTime time = this.timePicker.getValue() == null ?
                 LocalTime.now() : this.timePicker.getValue();
         is24HourView = this.timePicker.is24HourView();
 
         this.timePicker.valueProperty().addListener((o, oldVal, newVal) -> goToTime(newVal));
         getStyleClass().add("date-picker-popup");
-
+impossible to click twice on arrow button
         // create the header pane
         getChildren().add(createHeaderPane(time, is24HourView));
+        getChildren().add(new Separator(Orientation.HORIZONTAL));
 
         VBox contentHolder = new VBox();
         // create content pane
@@ -136,10 +134,112 @@ public class TimePickerContent1 extends VBox {
         }
     }
 
-    @Override
-    public String getUserAgentStylesheet() {
-//        return TimePickerContent1.class.getResource("/css/controls/jfx-time-picker.css").toExternalForm();
-        return null;
+    void init() {
+        calendarPlaceHolder.setOpacity(1);
+        if(unit.get() == TimeUnit.HOURS){
+            selectedHourLabel.setTextFill(Color.rgb(0, 0, 0, 0.87));
+        }else{
+            selectedMinLabel.setTextFill(Color.rgb(0, 0, 0, 0.87));
+        }
+    }
+
+    void clearFocus() {
+        LocalTime focusTime = timePicker.getValue();
+        if (focusTime == null) {
+            focusTime = LocalTime.now();
+        }
+        goToTime(focusTime);
+    }
+
+    private void goToTime(LocalTime time) {
+        if (time != null) {
+            int hour = time.getHour();
+            selectedHourLabel.setText(Integer.toString(hour % (is24HourView ? 24 : 12) == 0 ?
+                    (is24HourView ? 0 : 12) : hour % (is24HourView ? 24 : 12)));
+            selectedMinLabel.setText(unitConverter.toString(time.getMinute()));
+            if (!is24HourView) {
+                period.set(hour < 12 ? "AM" : "PM");
+            }
+            minsPointerRotate.setAngle(180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60));
+            hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+            _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+        }
+    }
+
+    /*
+     * header panel represents the selected Time
+     * we keep javaFX original style classes
+     */
+    protected StackPane createHeaderPane(LocalTime time, boolean _24HourView) {
+        int hour = time.getHour();
+
+        selectedHourLabel.setText(String.valueOf(hour % (_24HourView ? 24 : 12) == 0 ? (_24HourView ? 0 : 12) : hour % (_24HourView ? 24 : 12)));
+        selectedHourLabel.getStyleClass().add(SPINNER_LABEL);
+//        selectedHourLabel.setTextFill(Color.WHITE);
+        selectedHourLabel.setTextFill(Color.BLACK);
+        selectedHourLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
+        selectedHourLabel.setOnMouseClicked((click) -> unit.set(TimeUnit.HOURS));
+        selectedHourLabel.setMinWidth(49);
+        selectedHourLabel.setAlignment(Pos.CENTER_RIGHT);
+        timeLabel.set(selectedHourLabel);
+
+        selectedMinLabel.setText(String.valueOf(unitConverter.toString(time.getMinute())));
+        selectedMinLabel.getStyleClass().add(SPINNER_LABEL);
+        selectedMinLabel.setTextFill(fadedColor);
+        selectedMinLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
+        selectedMinLabel.setOnMouseClicked((click) -> unit.set(TimeUnit.MINUTES));
+
+        Label separatorLabel = new Label(":");
+        separatorLabel.setPadding(new Insets(0, 0, 4, 0));
+        separatorLabel.setTextFill(fadedColor);
+        separatorLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
+
+        periodPMLabel = new Label("PM");
+        periodPMLabel.getStyleClass().add(SPINNER_LABEL);
+        periodPMLabel.setTextFill(fadedColor);
+        periodPMLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 14));
+        periodPMLabel.setOnMouseClicked((click) -> period.set("PM"));
+
+        periodAMLabel = new Label("AM");
+        periodAMLabel.getStyleClass().add(SPINNER_LABEL);
+        periodAMLabel.setTextFill(fadedColor);
+        periodAMLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 14));
+        periodAMLabel.setOnMouseClicked((click) -> period.set("AM"));
+
+        // init period value
+        if (hour < 12) {
+//            periodAMLabel.setTextFill(Color.WHITE);
+            periodAMLabel.setTextFill(Color.BLACK);
+        } else {
+//            periodPMLabel.setTextFill(Color.WHITE);
+            periodPMLabel.setTextFill(Color.BLACK);
+        }
+        period.set(hour < 12 ? "AM" : "PM");
+
+        VBox periodContainer = new VBox();
+        periodContainer.setPadding(new Insets(0, 0, 0, 4));
+        periodContainer.getChildren().addAll(periodAMLabel, periodPMLabel);
+
+        // Year label container
+        HBox selectedTimeContainer = new HBox();
+        selectedTimeContainer.getStyleClass().add("spinner");
+        selectedTimeContainer.getChildren()
+                .addAll(selectedHourLabel, separatorLabel, selectedMinLabel);
+        if (!_24HourView) {
+            selectedTimeContainer.getChildren().add(periodContainer);
+        }
+        selectedTimeContainer.setAlignment(Pos.CENTER);
+        selectedTimeContainer.setFillHeight(false);
+
+        StackPane headerPanel = new StackPane();
+        headerPanel.getStyleClass().add("time-pane");
+//        headerPanel.setBackground(new Background(new BackgroundFill(this.timePicker.getDefaultColor(),
+//        headerPanel.setBackground(new Background(new BackgroundFill(Color.valueOf("#009688"),
+//                CornerRadii.EMPTY,
+//                Insets.EMPTY)));
+        headerPanel.setPadding(new Insets(8, 24, 8, 24));
+        headerPanel.getChildren().add(selectedTimeContainer);
+        return headerPanel;
     }
 
     protected BorderPane createContentPane(LocalTime time, boolean _24HourView) {
@@ -196,80 +296,6 @@ public class TimePickerContent1 extends VBox {
         contentContainer.setMinHeight(50);
         contentContainer.setPadding(new Insets(2, 12, 2, 12));
         return contentContainer;
-    }
-
-    /*
-     * header panel represents the selected Time
-     * we keep javaFX original style classes
-     */
-    protected StackPane createHeaderPane(LocalTime time, boolean _24HourView) {
-        int hour = time.getHour();
-
-        selectedHourLabel.setText(String.valueOf(hour % (_24HourView ? 24 : 12) == 0 ? (_24HourView ? 0 : 12) : hour % (_24HourView ? 24 : 12)));
-        selectedHourLabel.getStyleClass().add(SPINNER_LABEL);
-        selectedHourLabel.setTextFill(Color.WHITE);
-        selectedHourLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
-        selectedHourLabel.setOnMouseClicked((click) -> unit.set(TimeUnit.HOURS));
-        selectedHourLabel.setMinWidth(49);
-        selectedHourLabel.setAlignment(Pos.CENTER_RIGHT);
-        timeLabel.set(selectedHourLabel);
-
-        selectedMinLabel.setText(String.valueOf(unitConverter.toString(time.getMinute())));
-        selectedMinLabel.getStyleClass().add(SPINNER_LABEL);
-        selectedMinLabel.setTextFill(fadedColor);
-        selectedMinLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
-        selectedMinLabel.setOnMouseClicked((click) -> unit.set(TimeUnit.MINUTES));
-
-        Label separatorLabel = new Label(":");
-        separatorLabel.setPadding(new Insets(0, 0, 4, 0));
-        separatorLabel.setTextFill(fadedColor);
-        separatorLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 42));
-
-        periodPMLabel = new Label("PM");
-        periodPMLabel.getStyleClass().add(SPINNER_LABEL);
-        periodPMLabel.setTextFill(fadedColor);
-        periodPMLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 14));
-        periodPMLabel.setOnMouseClicked((click) -> period.set("PM"));
-
-        periodAMLabel = new Label("AM");
-        periodAMLabel.getStyleClass().add(SPINNER_LABEL);
-        periodAMLabel.setTextFill(fadedColor);
-        periodAMLabel.setFont(Font.font(ROBOTO, FontWeight.BOLD, 14));
-        periodAMLabel.setOnMouseClicked((click) -> period.set("AM"));
-
-        // init period value
-        if (hour < 12) {
-            periodAMLabel.setTextFill(Color.WHITE);
-        } else {
-            periodPMLabel.setTextFill(Color.WHITE);
-        }
-        period.set(hour < 12 ? "AM" : "PM");
-
-
-        VBox periodContainer = new VBox();
-        periodContainer.setPadding(new Insets(0, 0, 0, 4));
-        periodContainer.getChildren().addAll(periodAMLabel, periodPMLabel);
-
-        // Year label container
-        HBox selectedTimeContainer = new HBox();
-        selectedTimeContainer.getStyleClass().add("spinner");
-        selectedTimeContainer.getChildren()
-                .addAll(selectedHourLabel, separatorLabel, selectedMinLabel);
-        if (!_24HourView) {
-            selectedTimeContainer.getChildren().add(periodContainer);
-        }
-        selectedTimeContainer.setAlignment(Pos.CENTER);
-        selectedTimeContainer.setFillHeight(false);
-
-        StackPane headerPanel = new StackPane();
-        headerPanel.getStyleClass().add("time-pane");
-//        headerPanel.setBackground(new Background(new BackgroundFill(this.timePicker.getDefaultColor(),
-        headerPanel.setBackground(new Background(new BackgroundFill(Color.valueOf("#009688"),
-                CornerRadii.EMPTY,
-                Insets.EMPTY)));
-        headerPanel.setPadding(new Insets(8, 24, 8, 24));
-        headerPanel.getChildren().add(selectedTimeContainer);
-        return headerPanel;
     }
 
     private StackPane createHoursContent(LocalTime time, boolean _24HourView) {
@@ -482,16 +508,14 @@ public class TimePickerContent1 extends VBox {
         return new StackPane(pointerGroup, clockLabelsContainer);
     }
 
-    ObjectProperty<LocalTime> displayedTimeProperty() {
-        return selectedTime;
-    }
-
-    void init() {
-        calendarPlaceHolder.setOpacity(1);
-        if(unit.get() == TimeUnit.HOURS){
-            selectedHourLabel.setTextFill(Color.rgb(255, 255, 255, 0.87));
-        }else{
-            selectedMinLabel.setTextFill(Color.rgb(255, 255, 255, 0.87));
+    void updateValue() {
+        if (is24HourView) {
+            LocalTimeStringConverter localTimeStringConverter =
+                    new LocalTimeStringConverter(FormatStyle.SHORT, Locale.GERMAN);
+            timePicker.setValue(localTimeStringConverter.fromString(selectedHourLabel.getText()
+                    + ":" + selectedMinLabel.getText()));
+        } else {
+            timePicker.setValue(LocalTime.parse(selectedHourLabel.getText() + ":" + selectedMinLabel.getText() + " " + period.get(), DateTimeFormatter.ofPattern("h:mm a").withLocale(Locale.ENGLISH)));
         }
     }
 
@@ -523,40 +547,5 @@ public class TimePickerContent1 extends VBox {
                             Interpolator.EASE_BOTH)));
             new ParallelTransition(fadeout, fadein).play();
         }
-    }
-
-    void updateValue() {
-        if (is24HourView) {
-            LocalTimeStringConverter localTimeStringConverter =
-                    new LocalTimeStringConverter(FormatStyle.SHORT, Locale.GERMAN);
-            timePicker.setValue(localTimeStringConverter.fromString(selectedHourLabel.getText()
-                    + ":" + selectedMinLabel.getText()));
-        } else {
-            timePicker.setValue(LocalTime.parse(selectedHourLabel.getText() + ":" + selectedMinLabel.getText() + " " + period.get(), DateTimeFormatter.ofPattern("h:mm a").withLocale(Locale.ENGLISH)));
-        }
-    }
-
-
-    private void goToTime(LocalTime time) {
-        if (time != null) {
-            int hour = time.getHour();
-            selectedHourLabel.setText(Integer.toString(hour % (is24HourView ? 24 : 12) == 0 ?
-                    (is24HourView ? 0 : 12) : hour % (is24HourView ? 24 : 12)));
-            selectedMinLabel.setText(unitConverter.toString(time.getMinute()));
-            if (!is24HourView) {
-                period.set(hour < 12 ? "AM" : "PM");
-            }
-            minsPointerRotate.setAngle(180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60));
-            hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
-            _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
-        }
-    }
-
-    void clearFocus() {
-        LocalTime focusTime = timePicker.getValue();
-        if (focusTime == null) {
-            focusTime = LocalTime.now();
-        }
-        goToTime(focusTime);
     }
 }
