@@ -228,4 +228,12 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
             super.handleControlPropertyChanged(p);
         }
     }
+
+    public void syncWithAutoUpdate() {
+        if (!getPopup().isShowing() && timePicker.isShowing()) {
+            // Popup was dismissed. Maybe user clicked outside or typed ESCAPE.
+            // Make sure DatePicker button is in sync.
+            timePicker.hide();
+        }
+    }
 }

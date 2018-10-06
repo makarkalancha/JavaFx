@@ -82,7 +82,7 @@ public class TimePicker2Content extends VBox {
 
         this.timePicker.valueProperty().addListener((o, oldVal, newVal) -> goToTime(newVal));
         getStyleClass().add("date-picker-popup");
-impossible to click twice on arrow button
+
         // create the header pane
         getChildren().add(createHeaderPane(time, is24HourView));
         getChildren().add(new Separator(Orientation.HORIZONTAL));

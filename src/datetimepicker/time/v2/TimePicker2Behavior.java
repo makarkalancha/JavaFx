@@ -49,6 +49,14 @@ public class TimePicker2Behavior extends ComboBoxBaseBehavior<LocalTime> {
 //        if (!getNode().isShowing()) {
 //            super.onAutoHide(popup);
 //        }
+        // when we click on some non-interactive part of the
+        // calendar - we do not want to hide.
+        TimePicker2 timePicker = (TimePicker2)getControl();
+        TimePicker2Skin cpSkin = (TimePicker2Skin)timePicker.getSkin();
+        cpSkin.syncWithAutoUpdate();
+        // if the DatePicker is no longer showing, then invoke the super method
+        // to keep its show/hide state in sync.
+        if (!timePicker.isShowing()) super.onAutoHide();
     }
 
     protected static final List<KeyBinding> TIME_PICKER_BINDINGS = new ArrayList<>();
