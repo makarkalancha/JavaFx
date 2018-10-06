@@ -229,6 +229,8 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
         }
     }
 
+    change arrow in clock
+
     public void syncWithAutoUpdate() {
         if (!getPopup().isShowing() && timePicker.isShowing()) {
             // Popup was dismissed. Maybe user clicked outside or typed ESCAPE.
