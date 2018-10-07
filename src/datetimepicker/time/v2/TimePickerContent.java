@@ -75,7 +75,7 @@ public class TimePickerContent extends VBox {
     private NumberStringConverter unitConverter = new NumberStringConverter("#00");
     private ObjectProperty<LocalTime> selectedTime = new SimpleObjectProperty<>(this, "selectedTime");
 
-    TimePickerContent(final TimePicker timePicker) {
+    public TimePickerContent(final TimePicker timePicker) {
         this.timePicker = timePicker;
         LocalTime time = this.timePicker.getValue() == null ?
                 LocalTime.now() : this.timePicker.getValue();

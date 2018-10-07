@@ -21,8 +21,6 @@
 
 .time-picker > .text-field {
     -fx-padding: 0.166667em 0.416667em 0.25em 0.416667em; /* 2 5 3 5 */
-    /*-fx-padding: 0px;*/
-    /*-fx-background-color: yellow;*/
     -fx-background-radius: 4 0 0 4, 3 0 0 3, 2 0 0 2;
     -fx-background-insets: 0 0 -1 0, 0, 1 0 1 1;
 }
@@ -32,32 +30,3 @@
     -fx-background-radius: 5.4, 3, 2;
     -fx-background-insets: -1.4, 0, 1;
 }
-
-
-/* .time-picker-popup { */
-    /* -fx-background-color: -fx-box-border, -fx-control-inner-background; */
-    /* -fx-background-insets: 0, 1; */
-   /* /*-fx-background-radius: 0 6 6 6, 0 5 5 5; */
-   /* -fx-background-radius: 0; */
-   /* -fx-padding: 0; */
-   /* -fx-alignment: CENTER; /* VBox */ */
-   /* -fx-spacing: 0; /* VBox */ */
-   /* -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 ); */
-/* } */
-/* .time-picker-popup > * > .spinner { */
-   /* -fx-spacing: 0.25em; */
-   /* -fx-alignment: CENTER; */
-   /* -fx-fill-height: false; */
-/* } */
-/* .time-picker-popup > * > .spinner > .button { */
-   /* -fx-background-color: transparent; */
-   /* -fx-background-radius: 0; */
-/* } */
-/* .time-picker-popup > * > .spinner > .button:hover { */
-   /* -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; */
-   /* -fx-background-radius: 3, 2, 1; */
-/* } */
-/* .time-picker-popup > * > .spinner > .button:focused { */
-   /* -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-focus-color, -fx-body-color; */
-   /* -fx-background-radius: 3, 2, 1; */
-/* } */
