@@ -1,4 +1,4 @@
-package datetimepicker.time;
+package datetimepicker.time.v2;
 
 import com.sun.javafx.scene.control.behavior.ComboBoxBaseBehavior;
 import com.sun.javafx.scene.control.behavior.KeyBinding;
@@ -9,10 +9,10 @@ import java.util.List;
 
 /**
  * Created by mcalancea
- * Date: 02 Oct 2018
- * Time: 13:23
+ * Date: 03 Oct 2018
+ * Time: 18:39
  */
-public class TimePickerBehavior1 extends ComboBoxBaseBehavior<LocalTime> {
+public class TimePickerBehavior extends ComboBoxBaseBehavior<LocalTime> {
 
     /***************************************************************************
      *                                                                         *
@@ -20,8 +20,11 @@ public class TimePickerBehavior1 extends ComboBoxBaseBehavior<LocalTime> {
      *                                                                         *
      **************************************************************************/
 
-    public TimePickerBehavior1(final TimePicker1 timePicker) {
-        super(timePicker, JFX_TIME_PICKER_BINDINGS);
+    /**
+     *
+     */
+    public TimePickerBehavior(final TimePicker timePicker) {
+        super(timePicker, TIME_PICKER_BINDINGS);
     }
 
     /***************************************************************************
@@ -30,26 +33,25 @@ public class TimePickerBehavior1 extends ComboBoxBaseBehavior<LocalTime> {
      *                                                                         *
      **************************************************************************/
 
-    protected static final List<KeyBinding> JFX_TIME_PICKER_BINDINGS = new ArrayList<>();
-
-    static {
-        JFX_TIME_PICKER_BINDINGS.addAll(COMBO_BOX_BASE_BINDINGS);
-    }
-
-    /**************************************************************************
-     *                                                                        *
-     * Mouse Events handling (when losing focus)                              *
-     *                                                                        *
-     *************************************************************************/
-
+    /** {@inheritDoc} */
     @Override
     public void onAutoHide() {
-        TimePicker1 datePicker = (TimePicker1) getControl();
-        TimePickerSkin1 cpSkin = (TimePickerSkin1) datePicker.getSkin();
+        // when we click on some non-interactive part of the
+        // calendar - we do not want to hide.
+        TimePicker timePicker = (TimePicker)getControl();
+        TimePickerSkin cpSkin = (TimePickerSkin)timePicker.getSkin();
         cpSkin.syncWithAutoUpdate();
-        if (!datePicker.isShowing()) {
+        // if the TimePicker is no longer showing, then invoke the super method
+        // to keep its show/hide state in sync.
+        if (!timePicker.isShowing()) {
             super.onAutoHide();
         }
+    }
+
+    protected static final List<KeyBinding> TIME_PICKER_BINDINGS = new ArrayList<>();
+
+    static {
+        TIME_PICKER_BINDINGS.addAll(COMBO_BOX_BASE_BINDINGS);
     }
 
 }

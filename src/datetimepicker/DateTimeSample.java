@@ -1,8 +1,7 @@
 package datetimepicker;
 
 import com.jfoenix.controls.JFXTimePicker;
-import datetimepicker.time.TimePicker1;
-import datetimepicker.time.v2.TimePicker2;
+import datetimepicker.time.v2.TimePicker;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -78,14 +77,10 @@ public class DateTimeSample extends Application{
         });
         vBox.getChildren().add(jfxTimePicker);
 
-        TimePicker1 timePicker1 = new TimePicker1();
-        timePicker1.setIs24HourView(true);
-        vBox.getChildren().add(timePicker1);
-
         HBox hBox = new HBox();
-        TimePicker2 timePicker2 = new TimePicker2();
-        timePicker2.setIs24HourView(true);
-        timePicker2.setConverter(new StringConverter<LocalTime>(){
+        TimePicker timePicker = new TimePicker();
+        timePicker.setIs24HourView(true);
+        timePicker.setConverter(new StringConverter<LocalTime>(){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
             @Override
@@ -107,7 +102,7 @@ public class DateTimeSample extends Application{
             }
         });
 
-        hBox.getChildren().setAll(new Label("2->"),timePicker2);
+        hBox.getChildren().setAll(new Label("2->"), timePicker);
         vBox.getChildren().add(hBox);
 
         vBox.getChildren().add(new ComboBox<>());

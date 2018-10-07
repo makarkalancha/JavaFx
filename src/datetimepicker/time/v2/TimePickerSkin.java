@@ -17,7 +17,7 @@ import java.time.LocalTime;
  * Date: 03 Oct 2018
  * Time: 18:11
  */
-public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
+public class TimePickerSkin extends ComboBoxPopupControl<LocalTime> {
 
     /***************************************************************************
      *                                                                         *
@@ -25,13 +25,9 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
      *                                                                         *
      **************************************************************************/
 
-    private final TimePicker2 timePicker;
+    private final TimePicker timePicker;
     private TextField displayNode;
-    private TimePicker2Content timePickerContent;
-
-//    private final DatePickerBehavior behavior;
-
-
+    private TimePickerContent timePickerContent;
 
     /***************************************************************************
      *                                                                         *
@@ -46,14 +42,10 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
      *
      * @param control The control that this skin should be installed onto.
      */
-    public TimePicker2Skin(final TimePicker2 control) {
-        super(control, new TimePicker2Behavior(control));
+    public TimePickerSkin(final TimePicker control) {
+        super(control, new TimePickerBehavior(control));
 
         this.timePicker = control;
-
-        // install default input map for the control
-//        this.behavior = new DatePickerBehavior(control);
-//        control.setInputMap(behavior.getInputMap());
 
         // The "arrow" is actually a rectangular svg icon resembling a calendar.
         // Round the size of the icon to whole integers to get sharp edges.
@@ -74,45 +66,6 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
             }
         });
 
-//        registerChangeListener(control.chronologyProperty(), e -> {
-//            updateDisplayNode();
-//            timePickerContent = null;
-//            popup = null;
-//        });
-//        registerChangeListener(control.converterProperty(), e -> updateDisplayNode());
-//        registerChangeListener(control.dayCellFactoryProperty(), e -> {
-//            updateDisplayNode();
-//            timePickerContent = null;
-//            popup = null;
-//        });
-//        registerChangeListener(control.showWeekNumbersProperty(), e -> {
-//            if (timePickerContent != null) {
-//                timePickerContent.updateGrid();
-//                timePickerContent.updateWeeknumberDateCells();
-//            }
-//        });
-//        registerChangeListener(control.valueProperty(), e -> {
-//            updateDisplayNode();
-//            if (timePickerContent != null) {
-//                LocalDate date = control.getValue();
-//                timePickerContent.displayedYearMonthProperty().set((date != null) ? YearMonth.from(date) : YearMonth.now());
-//                timePickerContent.updateValues();
-//            }
-//            control.fireEvent(new ActionEvent());
-//        });
-//        registerChangeListener(control.showingProperty(), e -> {
-//            if (control.isShowing()) {
-//                if (timePickerContent != null) {
-//                    LocalTime time = control.getValue();
-////                    timePickerContent.displayedYearMonthProperty().set((time != null) ? YearMonth.from(time) : YearMonth.now());
-//                    timePicker.setValue(time);
-//                }
-//                show();
-//            } else {
-//                hide();
-//            }
-//        });
-
         registerChangeListener(timePicker.converterProperty(), "CONVERTER");
         registerChangeListener(timePicker.valueProperty(), "VALUE");
 
@@ -121,27 +74,10 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
         }
     }
 
-
-
-    /***************************************************************************
-     *                                                                         *
-     * Public API                                                              *
-     *                                                                         *
-     **************************************************************************/
-
-    /** {@inheritDoc} */
-    @Override public void dispose() {
-        super.dispose();
-
-//        if (behavior != null) {
-//            behavior.dispose();
-//        }
-    }
-
     /** {@inheritDoc} */
     @Override public Node getPopupContent() {
         if (timePickerContent == null) {
-            timePickerContent = new TimePicker2Content(timePicker);
+            timePickerContent = new TimePickerContent(timePicker);
         }
 
         return timePickerContent;
@@ -165,12 +101,12 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     @Override protected TextField getEditor() {
         // Use getSkinnable() here because this method is called from
         // the super constructor before timePicker is initialized.
-        return ((TimePicker2)getSkinnable()).getEditor();
+        return ((TimePicker)getSkinnable()).getEditor();
     }
 
     /** {@inheritDoc} */
     @Override protected StringConverter<LocalTime> getConverter() {
-        return ((TimePicker2)getSkinnable()).getConverter();
+        return ((TimePicker)getSkinnable()).getConverter();
     }
 
     /** {@inheritDoc} */
