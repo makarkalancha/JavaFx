@@ -85,6 +85,27 @@ public class DateTimeSample extends Application{
         HBox hBox = new HBox();
         TimePicker2 timePicker2 = new TimePicker2();
         timePicker2.setIs24HourView(true);
+        timePicker2.setConverter(new StringConverter<LocalTime>(){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            @Override
+            public LocalTime fromString(String string) {
+                if(StringUtils.isNotBlank(string)) {
+                    return LocalTime.parse(string, formatter);
+                }else {
+                    return null;
+                }
+            }
+
+            @Override
+            public String toString(LocalTime object) {
+                if(object != null) {
+                    return formatter.format(object);
+                }else {
+                    return "";
+                }
+            }
+        });
 
         hBox.getChildren().setAll(new Label("2->"),timePicker2);
         vBox.getChildren().add(hBox);

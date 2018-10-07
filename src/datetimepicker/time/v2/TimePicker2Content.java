@@ -55,6 +55,7 @@ public class TimePicker2Content extends VBox {
     protected TimePicker2 timePicker;
 
     private Color fadedColor = Color.rgb(0, 0, 0, 0.67);
+    private Color selectedColorBlue = Color.rgb(0, 100, 200)/*, 0.67)*/;
     private boolean is24HourView = false;
     private double contentCircleRadius = 100;
     private Label selectedHourLabel = new Label();
@@ -148,6 +149,9 @@ public class TimePicker2Content extends VBox {
         if (focusTime == null) {
             focusTime = LocalTime.now();
         }
+
+        init();
+
         goToTime(focusTime);
     }
 
@@ -304,11 +308,14 @@ public class TimePicker2Content extends VBox {
         Circle selectionCircle = new Circle(contentCircleRadius / 6),
                 _24HourSelectionCircle = new Circle(contentCircleRadius / 6);
 //        selectionCircle.fillProperty().bind(timePicker.defaultColorProperty());
+        selectionCircle.setFill(selectedColorBlue);
 //        _24HourSelectionCircle.fillProperty().bind(timePicker.defaultColorProperty());
+        _24HourSelectionCircle.setFill(selectedColorBlue);
 
         double shift = 9, _24HourShift = 27.5;
         Line line = new Line(shift, 0, contentCircleRadius, 0);
 //        line.fillProperty().bind(timePicker.defaultColorProperty());
+        line.setFill(selectedColorBlue);
         line.strokeProperty().bind(line.fillProperty());
         line.setStrokeWidth(1.5);
         hoursPointer.getChildren().addAll(line, selectionCircle);
@@ -324,6 +331,7 @@ public class TimePicker2Content extends VBox {
 
         Line _24HourLine = new Line(shift + _24HourShift, 0, contentCircleRadius, 0);
 //        _24HourLine.fillProperty().bind(timePicker.defaultColorProperty());
+        _24HourLine.setFill(selectedColorBlue);
         _24HourLine.strokeProperty().bind(_24HourLine.fillProperty());
         _24HourLine.setStrokeWidth(1.5);
         _24HoursPointer.getChildren().addAll(_24HourLine, _24HourSelectionCircle);
@@ -438,6 +446,7 @@ public class TimePicker2Content extends VBox {
         StackPane minsPointer = new StackPane();
         Circle selectionCircle = new Circle(contentCircleRadius / 6);
 //        selectionCircle.fillProperty().bind(timePicker.defaultColorProperty());
+        selectionCircle.setFill(selectedColorBlue);
 
         Circle minCircle = new Circle(selectionCircle.getRadius() / 8);
         minCircle.setFill(Color.rgb(255, 255, 255, 0.87));
@@ -455,6 +464,7 @@ public class TimePicker2Content extends VBox {
         double shift = 9;
         Line line = new Line(shift, 0, contentCircleRadius, 0);
 //        line.fillProperty().bind(timePicker.defaultColorProperty());
+        line.setFill(selectedColorBlue);
         line.strokeProperty().bind(line.fillProperty());
         line.setStrokeWidth(1.5);
         minsPointer.getChildren().addAll(line, selectionCircle, minCircle);

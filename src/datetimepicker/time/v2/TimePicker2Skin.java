@@ -158,12 +158,7 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     @Override
     public void show() {
         super.show();
-
-//        if (timePickerContent != null) {
-//            timePickerContent.init();
-            timePickerContent.clearFocus();
-//        }
-        System.out.println("timePicker.isShowing():" + timePicker.isShowing());
+        timePickerContent.clearFocus();
     }
 
     /** {@inheritDoc} */
@@ -206,30 +201,22 @@ public class TimePicker2Skin  extends ComboBoxPopupControl<LocalTime> {
     @Override
     protected void handleControlPropertyChanged(String p) {
         if ("CONVERTER".equals(p)) {
-            System.out.println("TimePickerSkin2.handleControlPropertyChanged->CONVERTER");
             updateDisplayNode();
         } else if ("EDITOR".equals(p)) {
-            System.out.println("TimePickerSkin2.handleControlPropertyChanged->EDITOR");
             getEditableInputNode();
         } else if ("SHOWING".equals(p)) {
             if (timePicker.isShowing()) {
-                System.out.println("TimePickerSkin2.handleControlPropertyChanged->SHOWING.show");
                 show();
             } else {
-                System.out.println("TimePickerSkin2.handleControlPropertyChanged->SHOWING.hide");
                 hide();
             }
         } else if ("VALUE".equals(p)) {
-            System.out.println("TimePickerSkin2.handleControlPropertyChanged->VALUE");
             updateDisplayNode();
             timePicker.fireEvent(new ActionEvent());
         } else {
-            System.out.println("TimePickerSkin2.handleControlPropertyChanged->else.super");
             super.handleControlPropertyChanged(p);
         }
     }
-
-    change arrow in clock
 
     public void syncWithAutoUpdate() {
         if (!getPopup().isShowing() && timePicker.isShowing()) {
