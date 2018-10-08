@@ -64,13 +64,14 @@ public class TimePickerContent extends VBox {
     private StackPane calendarPlaceHolder = new StackPane();
     private StackPane hoursContent;
     private StackPane minutesContent;
-    private Rotate hoursPointerRotate, _24HourHoursPointerRotate;
+    private Rotate hoursPointerRotate;
+    private Rotate _24HourHoursPointerRotate;
     private Rotate minsPointerRotate;
     private ObjectProperty<TimeUnit> unit = new SimpleObjectProperty<>(TimeUnit.HOURS);
     private DoubleProperty angle = new SimpleDoubleProperty(Math.toDegrees(2 * Math.PI / 12));
     private StringProperty period = new SimpleStringProperty("AM");
-    private ObjectProperty<Rotate> pointerRotate = new SimpleObjectProperty<>(),
-            _24HourPointerRotate = new SimpleObjectProperty<>();
+    private ObjectProperty<Rotate> pointerRotate = new SimpleObjectProperty<>();
+    private ObjectProperty<Rotate> _24HourPointerRotate = new SimpleObjectProperty<>();
     private ObjectProperty<Label> timeLabel = new SimpleObjectProperty<>();
     private NumberStringConverter unitConverter = new NumberStringConverter("#00");
     private ObjectProperty<LocalTime> selectedTime = new SimpleObjectProperty<>(this, "selectedTime");
@@ -160,13 +161,25 @@ public class TimePickerContent extends VBox {
             int hour = time.getHour();
             selectedHourLabel.setText(Integer.toString(hour % (is24HourView ? 24 : 12) == 0 ?
                     (is24HourView ? 0 : 12) : hour % (is24HourView ? 24 : 12)));
+            System.out.println(selectedHourLabel.getText());
             selectedMinLabel.setText(unitConverter.toString(time.getMinute()));
             if (!is24HourView) {
                 period.set(hour < 12 ? "AM" : "PM");
             }
             minsPointerRotate.setAngle(180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60));
-            hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
-            _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+            if (!is24HourView) {
+                hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+            }else {
+                when first opened hours are set incorrectly 12/24
+                if (hour == 0 || hour > 12) {
+                    hoursContent.getChildren().get(0).setVisible(false);
+                    hoursContent.getChildren().get(1).setVisible(true);
+                } else {
+                    hoursContent.getChildren().get(1).setVisible(false);
+                    hoursContent.getChildren().get(0).setVisible(true);
+                }
+                _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+            }
         }
     }
 
