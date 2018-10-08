@@ -53,5 +53,4 @@ public class TimePickerBehavior extends ComboBoxBaseBehavior<LocalTime> {
     static {
         TIME_PICKER_BINDINGS.addAll(COMBO_BOX_BASE_BINDINGS);
     }
-
 }

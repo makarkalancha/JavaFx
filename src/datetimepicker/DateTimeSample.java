@@ -78,7 +78,7 @@ public class DateTimeSample extends Application{
         vBox.getChildren().add(jfxTimePicker);
 
         HBox hBox = new HBox();
-        TimePicker timePicker = new TimePicker();
+        TimePicker timePicker = new TimePicker(LocalTime.of(11, 32, 0));
         timePicker.setMilitaryTime(true);
         timePicker.setConverter(new StringConverter<LocalTime>(){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -104,6 +104,34 @@ public class DateTimeSample extends Application{
 
         hBox.getChildren().setAll(new Label("2->"), timePicker);
         vBox.getChildren().add(hBox);
+
+        HBox hBox1 = new HBox();
+        TimePicker timePicker1 = new TimePicker(LocalTime.of(15, 32, 0));
+        timePicker1.setMilitaryTime(true);
+        timePicker1.setConverter(new StringConverter<LocalTime>(){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            @Override
+            public LocalTime fromString(String string) {
+                if(StringUtils.isNotBlank(string)) {
+                    return LocalTime.parse(string, formatter);
+                }else {
+                    return null;
+                }
+            }
+
+            @Override
+            public String toString(LocalTime object) {
+                if(object != null) {
+                    return formatter.format(object);
+                }else {
+                    return "";
+                }
+            }
+        });
+
+        hBox1.getChildren().setAll(new Label("3->"), timePicker1);
+        vBox.getChildren().add(hBox1);
 
         vBox.getChildren().add(new ComboBox<>());
         vBox.getChildren().add(new DatePicker());

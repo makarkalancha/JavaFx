@@ -145,7 +145,7 @@ public class TimePickerContent extends VBox {
         }
     }
 
-    void clearFocus() {
+    public void clearFocus() {
         LocalTime focusTime = timePicker.getValue();
         if (focusTime == null) {
             focusTime = LocalTime.now();
@@ -161,24 +161,19 @@ public class TimePickerContent extends VBox {
             int hour = time.getHour();
             selectedHourLabel.setText(Integer.toString(hour % (is24HourView ? 24 : 12) == 0 ?
                     (is24HourView ? 0 : 12) : hour % (is24HourView ? 24 : 12)));
-            System.out.println(selectedHourLabel.getText());
             selectedMinLabel.setText(unitConverter.toString(time.getMinute()));
             if (!is24HourView) {
                 period.set(hour < 12 ? "AM" : "PM");
             }
             minsPointerRotate.setAngle(180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60));
-            if (!is24HourView) {
-                hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
-            }else {
-                when first opened hours are set incorrectly 12/24
-                if (hour == 0 || hour > 12) {
-                    hoursContent.getChildren().get(0).setVisible(false);
-                    hoursContent.getChildren().get(1).setVisible(true);
-                } else {
-                    hoursContent.getChildren().get(1).setVisible(false);
-                    hoursContent.getChildren().get(0).setVisible(true);
-                }
+            if (hour == 0 || hour > 12) {
                 _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+                hoursContent.getChildren().get(0).setVisible(false);
+                hoursContent.getChildren().get(1).setVisible(true);
+            }else {
+                hoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
+                hoursContent.getChildren().get(0).setVisible(true);
+                hoursContent.getChildren().get(1).setVisible(false);
             }
         }
     }
@@ -310,7 +305,8 @@ public class TimePickerContent extends VBox {
 
     private StackPane createHoursContent(LocalTime time, boolean _24HourView) {
         // create hours content
-        StackPane hoursPointer = new StackPane(), _24HoursPointer = new StackPane();
+        StackPane hoursPointer = new StackPane();
+        StackPane _24HoursPointer = new StackPane();
         Circle selectionCircle = new Circle(contentCircleRadius / 6),
                 _24HourSelectionCircle = new Circle(contentCircleRadius / 6);
         selectionCircle.setFill(selectedColorBlue);
