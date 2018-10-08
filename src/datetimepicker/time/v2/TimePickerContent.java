@@ -79,7 +79,7 @@ public class TimePickerContent extends VBox {
         this.timePicker = timePicker;
         LocalTime time = this.timePicker.getValue() == null ?
                 LocalTime.now() : this.timePicker.getValue();
-        is24HourView = this.timePicker.is24HourView();
+        is24HourView = this.timePicker.isMilitaryTime();
 
         this.timePicker.valueProperty().addListener((o, oldVal, newVal) -> goToTime(newVal));
         getStyleClass().add("date-picker-popup");

@@ -31,13 +31,13 @@ import java.util.Locale;
  * Time: 15:58
  */
 public class TimePicker extends ComboBoxBase<LocalTime> {
-    private BooleanProperty _24HourView;
+    private BooleanProperty militaryTime;
     /**
      * Creates a default TimePicker instance with a <code>null</code> time value set.
      */
     public TimePicker() {
         this.defaultConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.ENGLISH);
-        this._24HourView = new SimpleBooleanProperty(false);
+        this.militaryTime = new SimpleBooleanProperty(false);
         this.initialize();
     }
 
@@ -49,7 +49,7 @@ public class TimePicker extends ComboBoxBase<LocalTime> {
      */
     public TimePicker(LocalTime localTime) {
         this.defaultConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.ENGLISH);
-        this._24HourView = new SimpleBooleanProperty(false);
+        this.militaryTime = new SimpleBooleanProperty(false);
 
         this.setValue(localTime);
 
@@ -82,10 +82,9 @@ public class TimePicker extends ComboBoxBase<LocalTime> {
         }
     }
 
-    // Create a symmetric (format/parse) converter with the default locale.
+    //    // Create a symmetric (format/parse) converter with the default locale.
     private StringConverter<LocalTime> defaultConverter =
             new LocalTimeStringConverter(FormatStyle.SHORT, null);
-
 
     // --- Editor
     /**
@@ -181,15 +180,15 @@ public class TimePicker extends ComboBoxBase<LocalTime> {
         return TimePicker.class.getResource("/time-picker.css").toExternalForm();
     }
 
-    public final BooleanProperty _24HourViewProperty() {
-        return this._24HourView;
+    public boolean isMilitaryTime() {
+        return militaryTime.get();
     }
 
-    public final boolean is24HourView() {
-        return this._24HourViewProperty().get();
+    public BooleanProperty militaryTimeProperty() {
+        return militaryTime;
     }
 
-    public final void setIs24HourView(boolean value) {
-        this._24HourViewProperty().setValue(Boolean.valueOf(value));
+    public void setMilitaryTime(boolean militaryTime) {
+        this.militaryTime.set(militaryTime);
     }
 }

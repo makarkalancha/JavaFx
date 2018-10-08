@@ -79,7 +79,7 @@ public class DateTimeSample extends Application{
 
         HBox hBox = new HBox();
         TimePicker timePicker = new TimePicker();
-        timePicker.setIs24HourView(true);
+        timePicker.setMilitaryTime(true);
         timePicker.setConverter(new StringConverter<LocalTime>(){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
