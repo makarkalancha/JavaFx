@@ -60,8 +60,6 @@
             <artifactId>jfxtras-labs</artifactId>
             <version>8.0-r6</version>
         </dependency>
-
-
     </dependencies>
 
 
