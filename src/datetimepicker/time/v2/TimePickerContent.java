@@ -150,7 +150,7 @@ public class TimePickerContent extends VBox {
         if (focusTime == null) {
             focusTime = LocalTime.now();
         }
-
+        unit.set(TimeUnit.HOURS);
         init();
 
         goToTime(focusTime);
@@ -360,7 +360,7 @@ public class TimePickerContent extends VBox {
                     label.setTextFill(Color.rgb(255, 255, 255, 0.87));
                     unit.set(TimeUnit.MINUTES);
                 } else {
-                    label.setTextFill(Color.rgb(100, 0, 0, 0.87));
+                    label.setTextFill(Color.rgb(0, 0, 0, 0.87));
                 }
             });
 
@@ -400,7 +400,6 @@ public class TimePickerContent extends VBox {
                 // init color
                 label.setTextFill((val == time.getHour() % 24 || (val == 0 && time.getHour() % 24 == 0) && is24HourView) ?
                         Color.rgb(255, 255, 255, 0.54) : Color.rgb(0, 0, 0, 0.54));
-                label.onMouseClickedProperty().addListener((observable, oldValue, newValue) -> System.out.println("clicke 24:" + label.getText()));
                 selectedHourLabel.textProperty().addListener((o, oldVal, newVal) -> {
                     if (Integer.parseInt(newVal) == Integer.parseInt(label.getText())) {
                         label.setTextFill(Color.rgb(255, 255, 255, 0.54));
