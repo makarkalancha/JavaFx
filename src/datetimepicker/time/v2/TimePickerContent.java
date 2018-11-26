@@ -478,19 +478,62 @@ public class TimePickerContent extends VBox {
         Pane clockLabelsContainer = new Pane();
         // inner circle radius
         double radius = contentCircleRadius - shift - selectionCircle.getRadius();
-        for (int i = 0; i < 12; i++) {
+//        for (int i = 0; i < 12; i++) {
+//            StackPane labelContainer = new StackPane();
+//            int val = ((i + 3) * 5) % 60;
+//            Label label = new Label(String.valueOf(unitConverter.toString(val)));
+//            label.setFont(Font.font(ROBOTO, FontWeight.BOLD, 12));
+//            // init label color
+//            label.setTextFill(val == time.getMinute() ?
+//                    Color.rgb(255, 255, 255, 0.87) : Color.rgb(0, 0, 0, 0.87));
+//            selectedMinLabel.textProperty().addListener((o, oldVal, newVal) -> {
+//                if (Integer.parseInt(newVal) == Integer.parseInt(label.getText())) {
+//                    label.setTextFill(Color.rgb(255, 255, 255, 0.87));
+//                } else {
+//                    label.setTextFill(Color.rgb(0, 0, 0, 0.87));
+//                }
+//            });
+//
+//            labelContainer.getChildren().add(label);
+//            double labelSize = (selectionCircle.getRadius() / Math.sqrt(2)) * 2;
+//            labelContainer.setMinSize(labelSize, labelSize);
+//
+//            double angle = 2 * i * Math.PI / 12;
+//            double xOffset = radius * Math.cos(angle);
+//            double yOffset = radius * Math.sin(angle);
+//            final double startx = contentCircleRadius + xOffset;
+//            final double starty = contentCircleRadius + yOffset;
+//            labelContainer.setLayoutX(startx - labelContainer.getMinWidth() / 2);
+//            labelContainer.setLayoutY(starty - labelContainer.getMinHeight() / 2);
+//
+//            // add label to the parent node
+//            clockLabelsContainer.getChildren().add(labelContainer);
+//        }
+        for (int i = 1; i <= 60; i++) {
             StackPane labelContainer = new StackPane();
-            int val = ((i + 3) * 5) % 60;
-            Label label = new Label(String.valueOf(unitConverter.toString(val)));
+            Label label;
+            int val = (i + 15) % 60;
+            if(i % 5 == 0) {
+                label = new Label(String.valueOf(unitConverter.toString(val)));
+                label.setTextFill(val == time.getMinute() ?
+                        Color.rgb(255, 255, 255, 0.87) : Color.rgb(0, 0, 0, 0.87));
+            }else {
+                label = new Label(".");
+                label.setTextFill(val == time.getMinute() ?
+                        Color.rgb(255, 255, 255, 0.87) : Color.rgb(255, 0, 0, 0.87));
+            }
             label.setFont(Font.font(ROBOTO, FontWeight.BOLD, 12));
             // init label color
-            label.setTextFill(val == time.getMinute() ?
-                    Color.rgb(255, 255, 255, 0.87) : Color.rgb(0, 0, 0, 0.87));
+
             selectedMinLabel.textProperty().addListener((o, oldVal, newVal) -> {
-                if (Integer.parseInt(newVal) == Integer.parseInt(label.getText())) {
-                    label.setTextFill(Color.rgb(255, 255, 255, 0.87));
+                if (!label.getText().equals(".")){
+                    if(Integer.parseInt(newVal) == Integer.parseInt(label.getText())) {
+                        label.setTextFill(Color.rgb(255, 255, 255, 0.87));
+                    }else {
+                        label.setTextFill(Color.rgb(0, 0, 0, 0.87));
+                    }
                 } else {
-                    label.setTextFill(Color.rgb(0, 0, 0, 0.87));
+                    label.setTextFill(Color.rgb(255, 0, 0, 0.87));
                 }
             });
 
@@ -498,7 +541,9 @@ public class TimePickerContent extends VBox {
             double labelSize = (selectionCircle.getRadius() / Math.sqrt(2)) * 2;
             labelContainer.setMinSize(labelSize, labelSize);
 
-            double angle = 2 * i * Math.PI / 12;
+            double angle = 2 * i * Math.PI / 60;
+            double angleDegrees = angle * (180/Math.PI);
+            System.out.println(i + ") rad = " + angle + "; degree = " + angleDegrees);
             double xOffset = radius * Math.cos(angle);
             double yOffset = radius * Math.sin(angle);
             final double startx = contentCircleRadius + xOffset;
