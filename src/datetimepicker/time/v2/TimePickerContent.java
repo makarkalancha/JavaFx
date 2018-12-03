@@ -166,6 +166,7 @@ public class TimePickerContent extends VBox {
                 period.set(hour < 12 ? "AM" : "PM");
             }
             minsPointerRotate.setAngle(180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60));
+            System.out.println("angle:" + (180 + (time.getMinute() + 45) % 60 * Math.toDegrees(2 * Math.PI / 60)));
             if (hour == 0 || hour > 12) {
                 _24HourHoursPointerRotate.setAngle(180 + Math.toDegrees(2 * (hour - 3) * Math.PI / 12));
                 hoursContent.getChildren().get(0).setVisible(false);
@@ -518,7 +519,9 @@ public class TimePickerContent extends VBox {
                 label.setTextFill(val == time.getMinute() ?
                         Color.rgb(255, 255, 255, 0.87) : Color.rgb(0, 0, 0, 0.87));
             }else {
-                label = new Label(".");
+                label = new Label("\u00B7");//u00B7 Middle Dot; u2022 Bullet
+                label.setAlignment(Pos.TOP_CENTER);
+                label.setUserData(val);
                 label.setTextFill(val == time.getMinute() ?
                         Color.rgb(255, 255, 255, 0.87) : Color.rgb(255, 0, 0, 0.87));
             }
@@ -526,14 +529,19 @@ public class TimePickerContent extends VBox {
             // init label color
 
             selectedMinLabel.textProperty().addListener((o, oldVal, newVal) -> {
-                if (!label.getText().equals(".")){
+                if (!label.getText().equals("\u00B7")){
                     if(Integer.parseInt(newVal) == Integer.parseInt(label.getText())) {
                         label.setTextFill(Color.rgb(255, 255, 255, 0.87));
                     }else {
                         label.setTextFill(Color.rgb(0, 0, 0, 0.87));
                     }
                 } else {
-                    label.setTextFill(Color.rgb(255, 0, 0, 0.87));
+                    System.out.println("label.data:"+label.getUserData());
+                    if(Integer.parseInt(newVal) == Integer.parseInt(label.getUserData().toString())) {
+                        label.setTextFill(Color.rgb(255, 255, 255, 0.87));
+                    }else {
+                        label.setTextFill(Color.rgb(255, 0, 0, 0.87));
+                    }
                 }
             });
 
